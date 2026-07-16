@@ -1,0 +1,4 @@
+* textarea=auto
+*.dll binary
+*.so binary
+*.dylib binary

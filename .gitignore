@@ -1,0 +1,22 @@
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Build artifacts
+/target/
+/build/
+/out/
+
+# Sources (closed source — not published)
+/src/
+
+# Release Staging (Private Templates)
+/release/
+
+# Maven classpath helper
+cp.txt
