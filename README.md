@@ -1,6 +1,6 @@
 # Cream CLI
 
-> A premium terminal file explorer and editor — built on the [FastJava](https://github.com/andrestubbe/FastJava) ecosystem.
+> A premium terminal file explorer and AI-powered editor — built on the [FastJava](https://github.com/andrestubbe/FastJava) ecosystem.
 
 ![Cream CLI Preview](docs/preview.jpg)
 
@@ -10,7 +10,7 @@
 
 Cream CLI is a native Windows terminal application that brings a sleek, keyboard-driven workflow to file navigation and code editing — entirely inside your terminal.
 
-Built on top of [FastTUI](https://github.com/andrestubbe/FastTUI), [FastTerminal](https://github.com/andrestubbe/FastTerminal), and [FastFileIndex](https://github.com/andrestubbe/FastFileIndex), it runs at native speed with 24-bit true color rendering.
+It is powered by the full FastJava ecosystem and runs at native speed with 24-bit true color rendering and JNI-backed native Windows APIs.
 
 ---
 
@@ -22,22 +22,29 @@ Built on top of [FastTUI](https://github.com/andrestubbe/FastTUI), [FastTerminal
 - **Fast File Index** — Press `A` to scan your entire drive in the background while the UI stays alive
 - **Throttled Repaints** — Locked 16ms render loop during scanning for smooth live feedback
 - **Mouse Support** — Click, drag-to-select, and scroll wheel work throughout
+- **AI Integration** — Powered by FastAI, FastAIMemory, FastAIModel, FastAIBot and FastAIAgent
 
 ---
 
-## Keybindings
+## Built on the FastJava Ecosystem
 
-| Key | Action |
+Cream CLI is assembled from the following FastJava libraries:
+
+| Library | Role |
 |---|---|
-| `↑` / `↓` | Navigate files / move caret |
-| `Enter` | Open file or folder |
-| `Backspace` | Navigate up one directory |
-| `ESC` | Return to explorer |
-| `Ctrl+D` | Toggle split view |
-| `Ctrl+A` | Select all (editor) |
-| `Ctrl+C` / `X` / `V` | Copy / Cut / Paste |
-| `Ctrl+Q` | Quit |
-| `A` | Scan full drive (background) |
+| [FastTerminal](https://github.com/andrestubbe/FastTerminal) | Native terminal rendering engine |
+| [FastTUI](https://github.com/andrestubbe/FastTUI) | Retained-mode UI component framework |
+| [FastANSI](https://github.com/andrestubbe/FastANSI) | ANSI escape code utilities |
+| [FastASCII](https://github.com/andrestubbe/FastASCII) | ASCII art and font rendering |
+| [FastEmojis](https://github.com/andrestubbe/FastEmojis) | Emoji width and rendering support |
+| [FastFileIndex](https://github.com/andrestubbe/FastFileIndex) | Native high-speed filesystem indexing |
+| [FastFileWatch](https://github.com/andrestubbe/FastFileWatch) | Real-time filesystem change detection |
+| [FastFileSearch](https://github.com/andrestubbe/FastFileSearch) | Fast fuzzy file search |
+| [FastAI](https://github.com/andrestubbe/FastAI) | AI inference engine |
+| [FastAIMemory](https://github.com/andrestubbe/FastAIMemory) | Persistent AI memory layer |
+| [FastAIModel](https://github.com/andrestubbe/FastAIModel) | AI model management |
+| [FastAIBot](https://github.com/andrestubbe/FastAIBot) | AI bot orchestration |
+| [FastAIAgent](https://github.com/andrestubbe/FastAIAgent) | AI agent runtime |
 
 ---
 
@@ -45,7 +52,7 @@ Built on top of [FastTUI](https://github.com/andrestubbe/FastTUI), [FastTerminal
 
 | Project | Description |
 |---|---|
-| **Cream CLI** | Terminal file explorer and editor |
+| **Cream CLI** | Terminal file explorer and AI editor |
 | Cream GUI *(coming soon)* | Native Windows GUI counterpart |
 
 ---
