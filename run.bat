@@ -5,6 +5,6 @@ call mvn clean compile dependency:build-classpath -Dmdep.outputFile=cp.txt -Dinc
 if %ERRORLEVEL% NEQ 0 ( echo ❌ Build failed. & exit /b %ERRORLEVEL% )
 
 set /p CP=<cp.txt
-java --enable-native-access=ALL-UNNAMED -cp "target\classes;%CP%" cream.cli.Demo
+java --enable-native-access=ALL-UNNAMED -cp "target\classes;%CP%" cream.cli.Client
 
 pause

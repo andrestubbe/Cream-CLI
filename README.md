@@ -4,7 +4,7 @@
 >
 > A next-generation command-line environment — built on the [FastJava](https://github.com/andrestubbe/FastJava) ecosystem.
 
-![Cream CLI Preview](docs/preview.jpg)
+![Cream CLI Preview](docs/screenshot.png)
 
 <!--
 

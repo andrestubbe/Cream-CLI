@@ -1,0 +1,6 @@
+* textarea=auto
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.dll binary
+*.so binary
+*.dylib binary
