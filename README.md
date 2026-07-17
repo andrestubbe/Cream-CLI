@@ -1,14 +1,16 @@
-# Cream CLI AF
+# Cream CLI
 
+> 🚧 **Work in Progress** — active development, expect breaking changes.
+>
 > A next-generation command-line environment — built on the [FastJava](https://github.com/andrestubbe/FastJava) ecosystem.
 
 ![Cream CLI Preview](docs/preview.jpg)
 
 ---
 
-## What is Cream CLI AF?
+## What is Cream CLI?
 
-Cream CLI AF removes the traditional separation between the terminal, file explorer, and AI.
+Cream CLI removes the traditional separation between the terminal, file explorer, and AI.
 
 Instead of treating the terminal as a text-only interface, Cream turns every command into something visible, navigable, and understandable. The command line, filesystem, editor, and AI all operate inside the same interactive workspace.
 
@@ -27,13 +29,6 @@ Cream takes the opposite approach.
 
 Instead of asking users to trust the AI, it lets them follow every step in real time.
 You don't just receive the result — you watch it happen.
-
-### Why "AF"
-
-AF stands for **Agent First**.
-
-Cream CLI AF is designed from the ground up for AI agents without sacrificing the human experience.
-Humans and AI work inside the exact same environment, seeing the same files, the same commands, and the same changes.
 
 ---
 
@@ -134,7 +129,7 @@ Cream CLI AF is assembled from the following FastJava libraries:
 
 | Project | Description |
 |---|---|
-| **Cream CLI AF** | Terminal file explorer, temporal shell, and AI workspace |
+| **Cream CLI** | Terminal file explorer, temporal shell, and AI workspace |
 | Cream GUI *(coming soon)* | Native Windows GUI counterpart |
 
 ---
