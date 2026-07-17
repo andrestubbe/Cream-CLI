@@ -12,11 +12,16 @@ Thumbs.db
 /build/
 /out/
 
-# Sources (closed source — not published)
+# Sources (closed source)
 /src/
 
-# Release Staging (Private Templates)
-/release/
-
-# Maven classpath helper
+# Infrastructure (local only, not published)
+pom.xml
+run.bat
+jitpack.yml
+.gitattributes
+.github/
 cp.txt
+
+# Release Staging
+/release/
