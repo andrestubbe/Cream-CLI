@@ -6,6 +6,8 @@
 
 ![Cream CLI Preview](docs/preview.jpg)
 
+<!--
+
 ---
 
 ## What is Cream CLI?
@@ -86,7 +88,7 @@ cream timeline project FastJava --range 2025-01-01 2026-01-01
 
 ## Built on the FastJava Ecosystem
 
-Cream CLI AF is assembled from the following FastJava libraries:
+Cream CLI is assembled from the following FastJava libraries:
 
 | Library | Role |
 |---|---|
@@ -135,3 +137,5 @@ Cream CLI AF is assembled from the following FastJava libraries:
 ---
 
 *Part of the [FastJava Ecosystem](https://github.com/andrestubbe/FastJava) — Making the JVM faster.*
+
+-->
