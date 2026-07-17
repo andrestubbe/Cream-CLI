@@ -11,9 +11,11 @@ public class Navigator extends Container {
     public Navigator(int cols, int rows) {
         super(0, 0, cols, rows - 4);
         int explorerHeight = rows - 4;
-        this.scroll = new ScrollVertical(cols - 1, 0, explorerHeight, Theme.SCROLL_FOREGROUND, Theme.SCROLL_BACKGROUND);
+        this.scroll = new ScrollVertical(cols - 1, 0, explorerHeight, Theme.BORDER, Theme.BACKGROUND);
         this.files = new Files(0, 0, cols, explorerHeight);
         this.files.setScrollBar(this.scroll);
+        this.files.setBackgroundColor(Theme.BACKGROUND);
+        this.files.setForegroundColor(Theme.FOREGROUND);
 
         this.add(this.files);
         this.add(this.scroll);

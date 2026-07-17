@@ -14,7 +14,6 @@ public class Client {
         t.start();
     }
 
-
     private final FastTerminalRenderer renderer;
     private final FastTerminalScene scene;
     private final Container container;
@@ -26,7 +25,7 @@ public class Client {
     private ViewMode viewMode = ViewMode.EXPLORER;
     public int termCols;
     public int termRows;
-    private Console console;
+//    private Console console;
 
     private SplitHorizontal splitWithNavigator;
     private SplitHorizontal splitWithTree;
@@ -42,8 +41,8 @@ public class Client {
 
         this.scene = new FastTerminalScene(0, 0, this.termCols, this.termRows);
         this.renderer = new FastTerminalRenderer(this.termCols, this.termRows);
-        this.renderer.setDiffRenderingEnabled(true);
-        this.renderer.setDirtyRectanglesEnabled(true);
+        this.renderer.setDiffRenderingEnabled(false);
+        this.renderer.setDirtyRectanglesEnabled(false);
         this.renderer.addScene(this.scene);
 
         this.container = new Container(0, 0, this.termCols, this.termRows);
@@ -67,8 +66,9 @@ public class Client {
 
         this.container.add(splitView);
         this.container.add(input);
+        this.container.setBackgroundColor(Theme.BACKGROUND);
 
-        this.console = new Console();
+//        this.console = new Console();
 
         // startSplitTracker();
 
@@ -131,7 +131,7 @@ public class Client {
             case TREE -> {
                 splitView.addSplit(splitWithTree);
                 splitWithTree.setPaneMode(SplitHorizontal.PaneMode.LEFT_ONLY);
-                treeNavigator.setRoot(new java.io.File("."));
+                treeNavigator.setRoot(new java.io.File("C:\\"));
             }
             case EDITOR -> {
                 splitView.addSplit(splitWithNavigator);
@@ -154,32 +154,32 @@ public class Client {
         return this.viewMode;
     }
 
-    private void startSplitTracker() {
-        Thread tracker = new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    return;
-                }
-
-                SplitHorizontal split = splitView.getSplit();
-                if (split != null) {
-                    String status = String.format(
-                            "Split Status | Mode: %s | Ratio: %.2f | Left: %dpx | Right: %dpx | Divider: %dpx | Dragging: %s",
-                            split.getPaneMode(),
-                            split.getRatio(),
-                            split.getLeft().getWidth(),
-                            split.getRight().getWidth(),
-                            split.getDivider().getWidth(),
-                            split.isDragging()
-                    );
-                    console.appendLine(status);
-                }
-            }
-        }, "split-tracker");
-
-        tracker.setDaemon(true);
-        tracker.start();
-    }
+//    private void startSplitTracker() {
+//        Thread tracker = new Thread(() -> {
+//            while (true) {
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    return;
+//                }
+//
+//                SplitHorizontal split = splitView.getSplit();
+//                if (split != null) {
+//                    String status = String.format(
+//                            "Split Status | Mode: %s | Ratio: %.2f | Left: %dpx | Right: %dpx | Divider: %dpx | Dragging: %s",
+//                            split.getPaneMode(),
+//                            split.getRatio(),
+//                            split.getLeft().getWidth(),
+//                            split.getRight().getWidth(),
+//                            split.getDivider().getWidth(),
+//                            split.isDragging()
+//                    );
+//                    console.appendLine(status);
+//                }
+//            }
+//        }, "split-tracker");
+//
+//        tracker.setDaemon(true);
+//        tracker.start();
+//    }
 }

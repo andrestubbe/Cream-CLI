@@ -234,15 +234,15 @@ public class Events {
                 ViewMode mode = client.getViewMode();
 
                 if (mode == ViewMode.EXPLORER) {
-                    navigator.files.scroll(delta);
+                    navigator.files.scroll(-delta);
                 } else if (mode == ViewMode.EDITOR) {
-                    editor.scroll(delta);
+                    editor.scroll(-delta);
                 } else if (mode == ViewMode.SPLIT) {
                     SplitHorizontal split = splitView.getSplit();
                     if (mouseCell[0] < split.getDivider().getX()) {
-                        navigator.files.scroll(delta);
+                        navigator.files.scroll(-delta);
                     } else {
-                        editor.scroll(delta);
+                        editor.scroll(-delta);
                     }
                 }
 
@@ -277,7 +277,7 @@ public class Events {
 
     private void triggerFileIndex() {
         new Thread(() -> {
-            String[] roots = {"C:\\"};
+            String[] roots = {"C:\\Users\\andre\\Documents"};
             final long[] lastRepaint = {0};
 
             FastFileIndex.buildWithProgress(
@@ -292,11 +292,12 @@ public class Events {
                             navigator.files.hoverFile(filename);
                         }
 
-                        long now = System.currentTimeMillis();
-                        if (now - lastRepaint[0] >= 16) {
-                            lastRepaint[0] = now;
-                            client.repaint();
-                        }
+//                        long now = System.currentTimeMillis();
+//                        if (now - lastRepaint[0] >= 16) {
+//                            lastRepaint[0] = now;
+//                            client.repaint();
+//                        }
+                        client.repaint();
                     }
             );
 

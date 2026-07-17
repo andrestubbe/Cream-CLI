@@ -1,4 +1,5 @@
 cream\cli\Bubble.class
+cream\cli\inputbox\CommandInput.class
 cream\cli\TreeNavigator.class
 cream\cli\EditorBehaviour.class
 cream\cli\ViewMode.class
@@ -7,6 +8,7 @@ cream\cli\Input.class
 cream\cli\Navigator.class
 cream\cli\FilesRenderer.class
 cream\cli\FilesNavigation.class
+cream\cli\inputbox\CommandResult.class
 cream\cli\Settings.class
 cream\cli\Console$1.class
 cream\cli\Events$1.class
@@ -16,6 +18,7 @@ cream\cli\Editor$LineNumber.class
 cream\cli\FileOpenListener.class
 cream\cli\FileFormatter.class
 cream\cli\FilesSelection.class
+cream\cli\PathAnimationSteps.class
 cream\cli\Theme.class
 cream\cli\Events.class
 cream\cli\Files.class
@@ -26,5 +29,6 @@ cream\cli\FilesDirectoryLoader.class
 cream\cli\Client.class
 cream\cli\Editor$CodeLine.class
 cream\cli\Editor.class
+cream\Commands.class
 cream\cli\Editor$EditorOverlay.class
 cream\cli\FileUtil.class

@@ -3,7 +3,7 @@ package cream.cli;
 import fastterminal.FastTerminalScene;
 import fasttui.component.*;
 
-public class Bubble {
+public class Bubble extends Container{
 
     public final Box botBox;
     public final TextArea botTextArea;
@@ -15,6 +15,7 @@ public class Bubble {
     private final Container container;
 
     public Bubble(int cols, int rows) {
+        super(0,0,cols,10);
         this.container = new Container(0, rows - 19, cols, 19);
         container.setBackgroundColor(0x111111);
 

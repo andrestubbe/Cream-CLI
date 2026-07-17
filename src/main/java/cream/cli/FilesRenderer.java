@@ -14,7 +14,7 @@ public final class FilesRenderer {
 
     public void render(FastTerminalScene scene, int x, int y, int width, int height, int backgroundColor, int foregroundColor) {
         renderHeader(scene, x, y, width);
-        renderList(scene, x, y, width, height, backgroundColor, foregroundColor);
+        renderList(scene, x, y + 1, width, height - 1, backgroundColor, foregroundColor); // TODO QICK FIX
         renderFooter(scene, x, y, width, height);
     }
 
@@ -33,11 +33,9 @@ public final class FilesRenderer {
         }
         for (int i = 0; i < visibleHeight; i++) {
             final int index = state.scrollOffset + i;
-
             if (index >= state.files.size()) {
                 break;
             }
-
             renderRow(scene, state.files.get(index), index, x, y + 1 + i, width, background, foreground);
         }
     }
@@ -53,11 +51,12 @@ public final class FilesRenderer {
         }
         final String text = FileFormatter.display(file, width - 12);
         scene.writeString(x + FileConstants.TEXT_PADDING_LEFT, y, text, fg, bg);
+
         final String info = FileFormatter.information(file);
         if (!info.isEmpty()) {
             final int sx = x + width - info.length() - FileConstants.SIZE_PADDING_RIGHT;
             if (sx > x + FileConstants.MIN_SIZE_COLUMN_WIDTH) {
-                scene.writeString(sx, y, info, selected ? Theme.FILE_SELECTION_FOREGROUND : Theme.FILE_INFORMATION, bg);
+                scene.writeString(sx, y, info, selected ? Theme.FILE_SELECTION_FOREGROUND : Theme.BORDER, bg);
             }
         }
     }

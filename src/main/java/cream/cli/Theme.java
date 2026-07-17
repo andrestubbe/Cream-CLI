@@ -4,21 +4,6 @@ import java.util.Map;
 
 public class Theme {
 
-    public static final int TRANSPARENT = -1;
-
-    public static final int FILE_NORMAL_BACKGROUND = TRANSPARENT;
-    public static final int FILE_NORMAL_FOREGROUND = 0xCCCCCC;
-    public static final int FILE_SELECTION_BACKGROUND = 0x222222;
-    public static final int FILE_SELECTION_FOREGROUND = 0xFFFFFF;
-    public static final int FILE_FOOTER = 0x71717A;
-    public static final int FILE_INFORMATION = 0x71717A;
-
-    public static final int PATH_BACKGROUND = -1;
-    public static final int PATH_FOREGROUND = 0xCCCCCC;
-    public static final int SCROLL_BACKGROUND = TRANSPARENT;
-    public static final int SCROLL_FOREGROUND = 0x666666;
-    public static final int INPUT_BORDER = 0x222222;
-
     // --- Hauptpalette (Retro‑Synthwave / Accent Colors) ---
 
     public static final int COLOR_1 = 0x4acdb8; // Mint Teal / Aqua Mint
@@ -118,4 +103,47 @@ public class Theme {
             Map.entry("csv", "📊 "),
             Map.entry("tsv", "📊 ")
     );
+
+    //    public static final int FILE_NORMAL_BACKGROUND = TRANSPARENT;
+//    public static final int FILE_NORMAL_FOREGROUND = 0xCCCCCC;
+//    public static final int FILE_SELECTION_BACKGROUND = 0x222222;
+//    public static final int FILE_SELECTION_FOREGROUND = 0xFFFFFF;
+//    public static final int FILE_FOOTER = 0x71717A;
+//    public static final int FILE_INFORMATION = 0x71717A;
+    //
+    //    public static final int PATH_BACKGROUND = -1;
+    //    public static final int PATH_FOREGROUND = 0xCCCCCC;
+    //    public static final int SCROLL_BACKGROUND = TRANSPARENT;
+    //    public static final int SCROLL_FOREGROUND = 0x666666;
+    //    public static final int INPUT_BORDER = 0x222222;
+
+    public static final int TRANSPARENT = -1;
+    public static final int BACKGROUND = COLOR_BLUE_2;
+    public static final int FOREGROUND = 0x95a8f1;
+    public static final int BORDER = COLOR_BLUE_8;
+
+
+    public static final int FILE_NORMAL_BACKGROUND = TRANSPARENT;
+    public static final int FILE_NORMAL_FOREGROUND = 0xCCCCCC;
+    public static final int FILE_SELECTION_BACKGROUND = 0x222222;
+    public static final int FILE_SELECTION_FOREGROUND = 0xFFFFFF;
+    public static final int FILE_FOOTER = 0x71717A;
+    public static final int FILE_INFORMATION = 0x71717A;
+
+    public static final int PATH_BACKGROUND = Theme.BACKGROUND;
+    public static final int PATH_FOREGROUND = 0xCCCCCC;
+    public static final int SCROLL_BACKGROUND = TRANSPARENT;
+    public static final int SCROLL_FOREGROUND = 0x666666;
+    public static final int EDITOR_NUMBERS = 0x444444;
+
+
+    public static final int INPUT_COMMAND_BORDER_NORMAL_FOREGROUND = COLOR_BLUE_8;
+    public static final int INPUT_COMMAND_BORDER_NORMAL_BACKGROUND = BACKGROUND;
+
+    public static final int DROPDOWN_NORMAL_BACKGROUND = TRANSPARENT;
+    public static final int DROPDOWN_NORMAL_FOREGROUND = 0x777777;
+    public static final int DROPDOWN_HOVER_BACKGROUND = TRANSPARENT;
+    public static final int DROPDOWN_HOVER_FOREGROUND = 0x999999;
+    public static final int DROPDOWN_PRESSED_BACKGROUND = 0x222222;
+    public static final int DROPDOWN_PRESSED_FOREGROUND = 0xFFFFFF;
 }

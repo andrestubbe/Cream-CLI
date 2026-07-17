@@ -72,8 +72,7 @@ public class Editor extends Container {
             codeLines[r] = new CodeLine(CODE_X, r, this);
         }
 
-        this.scroll = new ScrollVertical(cols - 1, 0, visibleLines,
-                Theme.SCROLL_FOREGROUND, Theme.SCROLL_BACKGROUND);
+        this.scroll = new ScrollVertical(cols - 1, 0, visibleLines, Theme.SCROLL_FOREGROUND, Theme.SCROLL_BACKGROUND);
         this.scroll.update(1, visibleLines, 0);
 
         // Transparent overlay covering the code area — carries mouse behaviour
@@ -197,8 +196,7 @@ public class Editor extends Container {
      */
     int[] selectionBounds() {
         if (!hasSelection) return null;
-        boolean anchorFirst = selAnchorLine < caretLine
-                || (selAnchorLine == caretLine && selAnchorCol <= caretCol);
+        boolean anchorFirst = selAnchorLine < caretLine || (selAnchorLine == caretLine && selAnchorCol <= caretCol);
         if (anchorFirst) return new int[]{selAnchorLine, selAnchorCol, caretLine, caretCol};
         else return new int[]{caretLine, caretCol, selAnchorLine, selAnchorCol};
     }
@@ -299,8 +297,7 @@ public class Editor extends Container {
         String text = getSelectedText();
         if (text.isEmpty()) return;
         try {
-            Toolkit.getDefaultToolkit().getSystemClipboard()
-                    .setContents(new StringSelection(text), null);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text), null);
         } catch (Exception ignored) {
         }
     }
@@ -368,13 +365,7 @@ public class Editor extends Container {
     }
 
     public Component[] getComponents() {
-        return Stream.concat(
-                Stream.concat(
-                        Stream.concat(Arrays.stream(numbers), Arrays.stream(codeLines)),
-                        Stream.of(scroll)
-                ),
-                Stream.of(overlay)
-        ).toArray(Component[]::new);
+        return Stream.concat(Stream.concat(Stream.concat(Arrays.stream(numbers), Arrays.stream(codeLines)), Stream.of(scroll)), Stream.of(overlay)).toArray(Component[]::new);
     }
 
     /**
@@ -427,7 +418,7 @@ public class Editor extends Container {
         @Override
         public void render(FastTerminalScene scene) {
             if (!isVisible()) return;
-            scene.writeString(x, y, text, 0x444444, -1);
+            scene.writeString(x, y, text, Theme.EDITOR_NUMBERS, -1);
         }
     }
 
@@ -520,8 +511,8 @@ public class Editor extends Container {
                     int start = i;
                     while (i < len) {
                         char ch = text.charAt(i);
-                        if (Character.isDigit(ch) || ch == 'x'
-                                || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F')) i++;
+                        if (Character.isDigit(ch) || ch == 'x' || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F'))
+                            i++;
                         else break;
                     }
                     Arrays.fill(fg, start, i, 0xFF9E64);
@@ -545,12 +536,10 @@ public class Editor extends Container {
 
         private static boolean isKeyword(String w) {
             return switch (w) {
-                case "package", "import", "public", "private", "protected",
-                     "final", "static", "class", "interface", "enum",
-                     "new", "for", "while", "if", "else", "return", "switch", "case", "default",
-                     "this", "super", "extends", "implements",
-                     "int", "long", "double", "float", "boolean",
-                     "char", "byte", "short", "void", "null", "true", "false" -> true;
+                case "package", "import", "public", "private", "protected", "final", "static", "class", "interface",
+                     "enum", "new", "for", "while", "if", "else", "return", "switch", "case", "default", "this",
+                     "super", "extends", "implements", "int", "long", "double", "float", "boolean", "char", "byte",
+                     "short", "void", "null", "true", "false" -> true;
                 default -> false;
             };
         }
