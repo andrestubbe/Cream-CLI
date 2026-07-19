@@ -28,27 +28,44 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.EmojiList.executor": "Run",
     "Application.PathAnimator.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/andre/Documents/2026-07-16-Work-CreamCLI",
-    "settings.editor.selected.configurable": "preferences.sourceCode.JAVA"
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="cream" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="cream.cli" />
+    </key>
   </component>
-  <component name="RunManager">
-    <configuration name="PathAnimationSteps" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="cream.cli.PathAnimationSteps" />
+  <component name="RunManager" selected="Application.EmojiList">
+    <configuration name="EmojiList" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="cream.cli.model.util.EmojiList" />
       <module name="CreamCLI" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cream.cli.*" />
+          <option name="PATTERN" value="cream.cli.model.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PathAnimationSteps" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="cream.cli.model.animation.PathAnimationSteps" />
+      <module name="CreamCLI" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cream.cli.model.animation.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -58,6 +75,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.EmojiList" />
         <item itemvalue="Application.PathAnimationSteps" />
       </list>
     </recent_temporary>

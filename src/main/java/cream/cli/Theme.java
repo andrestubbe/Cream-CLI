@@ -1,5 +1,7 @@
 package cream.cli;
 
+import fasttui.component.ColorSet;
+
 import java.util.Map;
 
 public class Theme {
@@ -117,11 +119,10 @@ public class Theme {
     //    public static final int SCROLL_FOREGROUND = 0x666666;
     //    public static final int INPUT_BORDER = 0x222222;
 
-    public static final int TRANSPARENT = -1;
+    public static final int TRANSPARENT = -2;
     public static final int BACKGROUND = COLOR_BLUE_2;
     public static final int FOREGROUND = 0x95a8f1;
     public static final int BORDER = COLOR_BLUE_8;
-
 
     public static final int FILE_NORMAL_BACKGROUND = TRANSPARENT;
     public static final int FILE_NORMAL_FOREGROUND = 0xCCCCCC;
@@ -136,7 +137,6 @@ public class Theme {
     public static final int SCROLL_FOREGROUND = 0x666666;
     public static final int EDITOR_NUMBERS = 0x444444;
 
-
     public static final int INPUT_COMMAND_BORDER_NORMAL_FOREGROUND = COLOR_BLUE_8;
     public static final int INPUT_COMMAND_BORDER_NORMAL_BACKGROUND = BACKGROUND;
 
@@ -146,4 +146,17 @@ public class Theme {
     public static final int DROPDOWN_HOVER_FOREGROUND = 0x999999;
     public static final int DROPDOWN_PRESSED_BACKGROUND = 0x222222;
     public static final int DROPDOWN_PRESSED_FOREGROUND = 0xFFFFFF;
+
+    public static final ColorSet inputBackground = new ColorSet(-2, 0x24293e, 0x24293e, 0x24293e);
+    public static final ColorSet inputIndicator = new ColorSet(-2, 0x95a8f1, 0xFFFFFF, 0x95a8f1);
+    public static final ColorSet inputForeground = new ColorSet(0x95a8f1, 0xc3cdf7, 0xc3cdf7, 0x95a8f1);
+    public static final ColorSet inputInformation = new ColorSet(0x596491, 0x596491, 0x596491, 0x596491);
+
+    public static final ColorSet legendTypeBackground = new ColorSet(COLOR_7, COLOR_7, 0x95a8f1, 0x95a8f1);
+    public static final ColorSet legendTypeForeground = new ColorSet(COLOR_BLUE_2, COLOR_BLUE_2, COLOR_BLUE_2, COLOR_BLUE_2);
+    public static final ColorSet legendDropdownBackground = new ColorSet(-2, -2, -2, -2);
+    public static final ColorSet legendDropdownForeground = new ColorSet(0x596491, 0x95a8f1, 0x596491, 0x95a8f1);
+    public static final ColorSet legendInformationBackground = new ColorSet(-2, -2, 0x24293e, 0x24293e);
+    public static final ColorSet legendInformationForeground = new ColorSet(COLOR_BLUE_8, 0xc3cdf7, 0xc3cdf7, 0x95a8f1);
+
 }

@@ -1,85 +1,101 @@
 package cream.cli;
 
+import cream.cli.control.Events;
+import cream.cli.view.input.Heatmap;
+import cream.cli.view.input.Input;
+import cream.cli.view.input.Result;
+import cream.cli.view.navigator.Navigator;
+import cream.cli.view.input.Service;
+import cream.cli.view.ui;
 import fastterminal.FastTerminal;
 import fastterminal.FastTerminalRenderer;
 import fastterminal.FastTerminalScene;
 import fasttui.component.Container;
-import fasttui.layout.SplitHorizontal;
-import fasttui.layout.SplitView;
 
 public class Client {
 
+    private final Navigator navigator;
+    private final ui.PopupModel popupModel;
+
     public static void main(String[] args) {
-        Thread t = new Thread(Client::new);
-        t.start();
+        Thread thread = new Thread(Client::new);
+        thread.start();
     }
 
-    private final FastTerminalRenderer renderer;
-    private final FastTerminalScene scene;
-    private final Container container;
-    private final SplitView splitView;
-    private final Navigator navigator;
-    private final TreeNavigator treeNavigator;
-    private final Input input;
-    private final Editor editor;
+    private FastTerminalRenderer renderer;
+    private FastTerminalScene scene;
+    public final Container container;
     private ViewMode viewMode = ViewMode.EXPLORER;
-    public int termCols;
-    public int termRows;
-//    private Console console;
-
-    private SplitHorizontal splitWithNavigator;
-    private SplitHorizontal splitWithTree;
+    public int cols;
+    public int rows;
+    private final Service service;
+    private final Result result;
+    private final Heatmap heatmap;
+    private final Input input;
 
     public Client() {
+        this.setupFastTerminal();
 
+        this.container = new Container(0, 0, this.cols, this.rows);
+        this.container.setBackgroundColor(Theme.BACKGROUND);
+
+        this.navigator = new Navigator(this.cols, this.rows);
+        this.input = new Input(this.cols, this.rows);
+        this.result = new Result(this.input, this.cols, this.rows);
+        this.heatmap = new Heatmap(this.input, this.cols, this.rows);
+        this.popupModel = new ui.PopupModel(cols, rows);
+        this.service = new Service(popupModel,this.cols, this.rows);
+
+
+        this.container.add(this.navigator);
+        this.container.add(this.service);
+        this.container.add(this.input);
+//        this.container.add(this.result);
+//        this.container.add(this.heatmap);
+        this.container.add(this.popupModel);
+
+        this.popupModel.setVisible(false);
+
+        this.setupEvents();
+        this.setupRenderer();
+    }
+
+    private void setupFastTerminal() {
         FastTerminal.setTitle("Cream CLI");
         FastTerminal.setRawMode(true);
         final int[] size = FastTerminal.getTerminalSize();
-        this.termCols = size[0];
-        this.termRows = size[1];
-        final int contentRows = termRows - 4;
-
-        this.scene = new FastTerminalScene(0, 0, this.termCols, this.termRows);
-        this.renderer = new FastTerminalRenderer(this.termCols, this.termRows);
+        this.cols = size[0];
+        this.rows = size[1];
+        this.scene = new FastTerminalScene(0, 0, this.cols, this.rows);
+        this.renderer = new FastTerminalRenderer(this.cols, this.rows);
         this.renderer.setDiffRenderingEnabled(false);
         this.renderer.setDirtyRectanglesEnabled(false);
         this.renderer.addScene(this.scene);
+    }
 
-        this.container = new Container(0, 0, this.termCols, this.termRows);
-        this.navigator = new Navigator(this.termCols, this.termRows);
-        this.treeNavigator = new TreeNavigator(this.termCols, this.termRows);
-        this.input = new Input(this.termCols, this.termRows);
-        this.editor = new Editor(this.termCols, this.termRows);
-
+    private void setupEvents() {
         final Events events = new Events(this, this.scene, this.renderer, this.container);
-
-        this.navigator.files.setFileOpenListener(file -> {
-            editor.loadFile(file);
-            setViewMode(ViewMode.EDITOR);
-        });
-
-        this.splitWithNavigator = new SplitHorizontal(navigator, editor);
-        this.splitWithTree = new SplitHorizontal(treeNavigator, editor);
-
-        this.splitView = new SplitView(0, 0, termCols, contentRows);
-        this.splitView.addSplit(splitWithNavigator);
-
-        this.container.add(splitView);
-        this.container.add(input);
-        this.container.setBackgroundColor(Theme.BACKGROUND);
-
-//        this.console = new Console();
-
-        // startSplitTracker();
-
-        this.setViewMode(ViewMode.EXPLORER);
-
-        events.initAll(this.navigator, this.treeNavigator, this.editor, this.input, this.splitView);
+        events.initAll(this.navigator, null, null, this.input, null);
         events.setupShutdownHook();
+    }
 
+    private void setupRenderer() {
         this.scene.clear();
         this.renderer.clearPrev();
-        repaint();
+        this.repaint();
+
+        Thread blinkThread = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    return;
+                }
+                repaint();
+            }
+        }, "caret-blink");
+        blinkThread.setDaemon(true);
+        blinkThread.start();
 
         try {
             Thread.currentThread().join();
@@ -94,27 +110,22 @@ public class Client {
     }
 
     public void handleTerminalResize(int cols, int rows) {
-        this.termCols = cols;
-        this.termRows = rows;
-        final int contentRows = rows - 4;
-
+        this.cols = cols;
+        this.rows = rows;
         this.renderer.resize(cols, rows);
         this.scene.resize(cols, rows);
-
         this.container.setWidth(cols);
         this.container.setHeight(rows);
 
-        this.splitView.setWidth(cols);
-        this.splitView.setHeight(contentRows);
-
-        this.navigator.setHeight(contentRows);
-        this.editor.setHeight(contentRows);
-
-        this.input.onResize(cols, rows);
-
-        this.splitView.layoutSplit();
-        this.navigator.onResize();
-        this.editor.onResize();
+        if (this.input != null) {
+            this.input.setY(rows - 4);
+        }
+        if (this.result != null) {
+            this.result.setY(rows - 8);
+        }
+        if (this.service != null) {
+            this.service.setY(rows - 1);
+        }
 
         this.scene.clear();
         this.renderer.clearPrev();
@@ -123,63 +134,11 @@ public class Client {
 
     public void setViewMode(ViewMode mode) {
         this.viewMode = mode;
-        switch (mode) {
-            case EXPLORER -> {
-                splitView.addSplit(splitWithNavigator);
-                splitWithNavigator.setPaneMode(SplitHorizontal.PaneMode.LEFT_ONLY);
-            }
-            case TREE -> {
-                splitView.addSplit(splitWithTree);
-                splitWithTree.setPaneMode(SplitHorizontal.PaneMode.LEFT_ONLY);
-                treeNavigator.setRoot(new java.io.File("C:\\"));
-            }
-            case EDITOR -> {
-                splitView.addSplit(splitWithNavigator);
-                splitWithNavigator.setPaneMode(SplitHorizontal.PaneMode.RIGHT_ONLY);
-            }
-            case SPLIT -> {
-                splitView.addSplit(splitWithNavigator);
-                splitWithNavigator.setPaneMode(SplitHorizontal.PaneMode.SPLIT);
-            }
-        }
-        this.splitView.layoutSplit();
-        this.navigator.onResize();
-        this.treeNavigator.onResize();
-        this.editor.onResize();
-        this.scene.clear();
-        this.renderer.clearPrev();
     }
 
     public ViewMode getViewMode() {
         return this.viewMode;
     }
-
-//    private void startSplitTracker() {
-//        Thread tracker = new Thread(() -> {
-//            while (true) {
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e) {
-//                    return;
-//                }
-//
-//                SplitHorizontal split = splitView.getSplit();
-//                if (split != null) {
-//                    String status = String.format(
-//                            "Split Status | Mode: %s | Ratio: %.2f | Left: %dpx | Right: %dpx | Divider: %dpx | Dragging: %s",
-//                            split.getPaneMode(),
-//                            split.getRatio(),
-//                            split.getLeft().getWidth(),
-//                            split.getRight().getWidth(),
-//                            split.getDivider().getWidth(),
-//                            split.isDragging()
-//                    );
-//                    console.appendLine(status);
-//                }
-//            }
-//        }, "split-tracker");
-//
-//        tracker.setDaemon(true);
-//        tracker.start();
-//    }
 }
+// [L] 🖥️ LocalAI
+//[R] ☁️ RemoteAI

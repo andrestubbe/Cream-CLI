@@ -34,6 +34,11 @@
         </dependency>
         <dependency>
             <groupId>com.github.andrestubbe</groupId>
+            <artifactId>FastTerminal</artifactId>
+            <version>0.1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.andrestubbe</groupId>
             <artifactId>FastTUI</artifactId>
             <version>0.1.1</version>
         </dependency>
