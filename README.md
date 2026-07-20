@@ -6,6 +6,16 @@
 
 ![Cream CLI Preview](docs/screenshot.png)
 
+## Inspiration
+
+Cream CLI draws major inspiration from these classical developer workflows and tools:
+- **[GNU Emacs](https://www.gnu.org/software/emacs/)**: The ultimate extensible terminal workstation model.
+- **[Plan 9 Acme](https://en.wikipedia.org/wiki/Acme_(text_editor))**: The integration of filesystem representation, text, and command execution.
+- **[Neovim Telescope](https://github.com/nvim-telescope/telescope.nvim)**: The fluid, keyboard-driven fuzzy query launcher with instantaneous interactive previews.
+- **[Raycast](https://www.raycast.com/)** & **[macOS Spotlight](https://support.apple.com/guide/mac-help/spotlight-mchlp1011/mac)**: Desktop-level keyboard-first command launchers.
+- **[Alfred](https://www.alfredapp.com/)**: Classic fuzzy-driven application launcher and productivity dashboard.
+- **[Rofi](https://github.com/davatorium/rofi)** & **[dmenu](https://tools.suckless.org/dmenu/)**: Fast, keyboard-controlled dynamic window manager menus.
+
 <!--
 
 ---

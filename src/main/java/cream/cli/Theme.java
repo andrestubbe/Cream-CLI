@@ -124,15 +124,6 @@ public class Theme {
     public static final int FOREGROUND = 0x95a8f1;
     public static final int BORDER = COLOR_BLUE_8;
 
-    public static final int FILE_NORMAL_BACKGROUND = TRANSPARENT;
-    public static final int FILE_NORMAL_FOREGROUND = 0xCCCCCC;
-    public static final int FILE_SELECTION_BACKGROUND = 0x222222;
-    public static final int FILE_SELECTION_FOREGROUND = 0xFFFFFF;
-    public static final int FILE_FOOTER = 0x71717A;
-    public static final int FILE_INFORMATION = 0x71717A;
-
-    public static final int PATH_BACKGROUND = Theme.BACKGROUND;
-    public static final int PATH_FOREGROUND = 0xCCCCCC;
     public static final int SCROLL_BACKGROUND = TRANSPARENT;
     public static final int SCROLL_FOREGROUND = 0x666666;
     public static final int EDITOR_NUMBERS = 0x444444;
@@ -158,5 +149,15 @@ public class Theme {
     public static final ColorSet legendDropdownForeground = new ColorSet(0x596491, 0x95a8f1, 0x596491, 0x95a8f1);
     public static final ColorSet legendInformationBackground = new ColorSet(-2, -2, 0x24293e, 0x24293e);
     public static final ColorSet legendInformationForeground = new ColorSet(COLOR_BLUE_8, 0xc3cdf7, 0xc3cdf7, 0x95a8f1);
+
+    public static final int COLOR_PATH_FOREGROUND = 0xa1d5ff;
+    public static final int COLOR_PATH_BACKGROUND = Theme.TRANSPARENT;
+    public static final int COLOR_FILE_NORMAL_BACKGROUND = TRANSPARENT;
+    public static final int COLOR_FILE_NORMAL_FOREGROUND = 0xCCCCCC;
+    public static final int COLOR_FILE_SELECTION_BACKGROUND = 0x333a5b;
+    public static final int COLOR_FILE_SELECTION_FOREGROUND = 0xc0d4ff;
+    public static final int COLOR_INFO_NORMAL_BACKGROUND = 0x373e59;
+    public static final int COLOR_INFO_SELECTED_BACKGROUND = 0x7ba3fb;
+    public static final int COLOR_FILE_FOOTER = 0x71717A;
 
 }

@@ -5,8 +5,6 @@ import cream.cli.view.input.Heatmap;
 import cream.cli.view.input.Input;
 import cream.cli.view.input.Result;
 import cream.cli.view.navigator.Navigator;
-import cream.cli.view.input.Service;
-import cream.cli.view.ui;
 import fastterminal.FastTerminal;
 import fastterminal.FastTerminalRenderer;
 import fastterminal.FastTerminalScene;
@@ -15,7 +13,6 @@ import fasttui.component.Container;
 public class Client {
 
     private final Navigator navigator;
-    private final ui.PopupModel popupModel;
 
     public static void main(String[] args) {
         Thread thread = new Thread(Client::new);
@@ -28,7 +25,6 @@ public class Client {
     private ViewMode viewMode = ViewMode.EXPLORER;
     public int cols;
     public int rows;
-    private final Service service;
     private final Result result;
     private final Heatmap heatmap;
     private final Input input;
@@ -39,22 +35,18 @@ public class Client {
         this.container = new Container(0, 0, this.cols, this.rows);
         this.container.setBackgroundColor(Theme.BACKGROUND);
 
-        this.navigator = new Navigator(this.cols, this.rows);
+        this.navigator = new Navigator(this.cols, this.rows, this::repaint);
         this.input = new Input(this.cols, this.rows);
+        this.input.text.addStateChangeListener(source -> {
+            this.onInputFocusChanged(source.isFocused());
+        });
         this.result = new Result(this.input, this.cols, this.rows);
         this.heatmap = new Heatmap(this.input, this.cols, this.rows);
-        this.popupModel = new ui.PopupModel(cols, rows);
-        this.service = new Service(popupModel,this.cols, this.rows);
-
 
         this.container.add(this.navigator);
-        this.container.add(this.service);
         this.container.add(this.input);
-//        this.container.add(this.result);
-//        this.container.add(this.heatmap);
-        this.container.add(this.popupModel);
-
-        this.popupModel.setVisible(false);
+        this.container.add(this.input.popupService);
+        this.container.add(this.input.popupModel);
 
         this.setupEvents();
         this.setupRenderer();
@@ -68,8 +60,8 @@ public class Client {
         this.rows = size[1];
         this.scene = new FastTerminalScene(0, 0, this.cols, this.rows);
         this.renderer = new FastTerminalRenderer(this.cols, this.rows);
-        this.renderer.setDiffRenderingEnabled(false);
-        this.renderer.setDirtyRectanglesEnabled(false);
+//        this.renderer.setDiffRenderingEnabled(true);
+//        this.renderer.setDirtyRectanglesEnabled(true);
         this.renderer.addScene(this.scene);
     }
 
@@ -91,7 +83,9 @@ public class Client {
                 } catch (InterruptedException e) {
                     return;
                 }
-                repaint();
+                if (input != null && input.text != null && input.text.isFocused()) {
+                    repaint();
+                }
             }
         }, "caret-blink");
         blinkThread.setDaemon(true);
@@ -103,8 +97,11 @@ public class Client {
         }
     }
 
-    public void repaint() {
-        this.scene.clear();
+    public synchronized void repaint() {
+        if (this.input != null) {
+            this.input.adjustHeight(this.rows);
+        }
+//        this.scene.clear();
         this.container.render(scene);
         this.renderer.render();
     }
@@ -123,9 +120,6 @@ public class Client {
         if (this.result != null) {
             this.result.setY(rows - 8);
         }
-        if (this.service != null) {
-            this.service.setY(rows - 1);
-        }
 
         this.scene.clear();
         this.renderer.clearPrev();
@@ -138,6 +132,10 @@ public class Client {
 
     public ViewMode getViewMode() {
         return this.viewMode;
+    }
+
+    private void onInputFocusChanged(boolean focused) {
+        // Tiny focus listener that can be expanded later by the user
     }
 }
 // [L] 🖥️ LocalAI
