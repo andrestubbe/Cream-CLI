@@ -183,17 +183,6 @@ public class MouseHandler implements FastMouseListener {
                 }
             }
 
-            // Active Popup Mouse Interception
-            if (omnibox != null && omnibox.popupModel != null && omnibox.popupModel.isVisible()) {
-                if (omnibox.popupModel.containsPoint(mouseCell[0], mouseCell[1])) {
-                    omnibox.popupModel.handleMouseClick(mouseCell[0], mouseCell[1], true);
-                } else {
-                    omnibox.popupModel.setVisible(false);
-                }
-                client.repaint();
-                return;
-            }
-
             Component hit = EventDispatcher.findComponentAt(container, mouseCell[0], mouseCell[1]);
             draggedComponent = hit;
 
@@ -203,10 +192,6 @@ public class MouseHandler implements FastMouseListener {
                 newTarget = client.getViewManager().filesController;
             } else if (editor != null && editor.isVisible() && mouseCell[0] >= editor.getX() && mouseCell[0] < editor.getX() + editor.getWidth() && mouseCell[1] >= editor.getY() && mouseCell[1] < editor.getY() + editor.getHeight()) {
                 newTarget = client.getViewManager().editorController;
-            } else if (omnibox != null && omnibox.footer != null && mouseCell[0] >= omnibox.footer.getX() + omnibox.footer.model.getX() && mouseCell[0] < omnibox.footer.getX() + omnibox.footer.model.getX() + omnibox.footer.model.getWidth() && mouseCell[1] == omnibox.footer.getY()) {
-                newTarget = client.getViewManager().omniboxModelController;
-                omnibox.popupModel.setVisible(!omnibox.popupModel.isVisible());
-                if (omnibox.popupModel.isVisible()) fm.setCurrentComponent(omnibox.popupModel);
             } else if (omnibox != null && (hit == omnibox.text || (mouseCell[0] >= omnibox.getX() && mouseCell[0] < omnibox.getX() + omnibox.getWidth() && mouseCell[1] >= omnibox.getY() && mouseCell[1] < omnibox.getY() + omnibox.box.getHeight()))) {
                 newTarget = client.getViewManager().omniboxTextController;
             }
