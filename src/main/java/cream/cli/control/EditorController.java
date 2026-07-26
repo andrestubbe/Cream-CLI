@@ -123,18 +123,18 @@ public class EditorController implements FocusTarget {
                         client.dialog.setVisible(false);
                         if (option == Dialog.Option.SAVE) {
                             editor.fileManager.saveFile();
-                            client.saveState();
+                            client.closeFileState();
                             client.showExplorer();
                         } else if (option == Dialog.Option.DONT_SAVE) {
                             editor.fileManager.setDirty(false);
-                            client.saveState();
+                            client.closeFileState();
                             client.showExplorer();
                         }
                         client.repaint();
                     });
                     client.dialog.setVisible(true);
                 } else {
-                    client.saveState();
+                    client.closeFileState();
                     client.showExplorer();
                 }
             }

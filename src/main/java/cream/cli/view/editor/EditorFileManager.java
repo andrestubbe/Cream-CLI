@@ -94,6 +94,18 @@ public class EditorFileManager {
         } catch (Exception ignored) {}
     }
 
+    /** Saves only lastDir, clearing lastFile — used when closing a file intentionally. */
+    public static void saveDirectoryOnly(java.io.File dir) {
+        try {
+            Path stateFile = getStateFilePath();
+            Path stateDir = stateFile.getParent();
+            if (!Files.exists(stateDir)) Files.createDirectories(stateDir);
+            String json = String.format("{\"lastDir\":\"%s\"}",
+                    dir.getAbsolutePath().replace("\\", "\\\\"));
+            Files.writeString(stateFile, json);
+        } catch (Exception ignored) {}
+    }
+
     public boolean restoreEditorState() {
         try {
             Path stateFile = getStateFilePath();

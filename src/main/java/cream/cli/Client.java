@@ -99,6 +99,19 @@ public class Client {
     }
 
     /**
+     * Called when the user intentionally closes a file (ESC).
+     * Saves only the directory — clears lastFile so restart opens the navigator, not the editor.
+     */
+    public void closeFileState() {
+        if (this.viewManager != null && this.viewManager.editor != null) {
+            java.io.File current = this.viewManager.editor.fileManager.getCurrentFile();
+            if (current != null && current.getParentFile() != null) {
+                EditorFileManager.saveDirectoryOnly(current.getParentFile());
+            }
+        }
+    }
+
+    /**
      * Called when the navigator enters a different directory.
      */
     public void saveDirectoryState(File dir) {
