@@ -32,10 +32,29 @@ public class DocumentOperations {
         int l = editor.caret.getLine();
         int col = editor.caret.getCol();
         String line = editor.buffer.getLine(l);
+
+        String beforeCaret = line.substring(0, col);
         String rest = line.substring(col);
-        editor.buffer.setLine(l, line.substring(0, col));
-        editor.buffer.insertLine(l + 1, rest);
-        editor.caret.set(l + 1, 0);
+
+        // Extract leading indentation from line before caret
+        StringBuilder indent = new StringBuilder();
+        for (int i = 0; i < beforeCaret.length(); i++) {
+            char ch = beforeCaret.charAt(i);
+            if (Character.isWhitespace(ch)) {
+                indent.append(ch);
+            } else {
+                break;
+            }
+        }
+
+        // Increase indent by 4 spaces if line before caret ends with '{'
+        if (beforeCaret.trim().endsWith("{")) {
+            indent.append("    ");
+        }
+
+        editor.buffer.setLine(l, beforeCaret);
+        editor.buffer.insertLine(l + 1, indent + rest);
+        editor.caret.set(l + 1, indent.length());
         editor.fileManager.setDirty(true);
         editor.caretNav.ensureCaretVisible();
         editor.refresh();
