@@ -24,7 +24,7 @@ public class Client {
         System.setProperty("sun.java2d.uiScale", "1.0");
         TerminalManager.setupTerminalState();
         TerminalManager.setupCreamLog();
-        Thread thread = new Thread(Client::new);
+        Thread thread = new Thread(() -> new Client(args));
         thread.start();
     }
 
@@ -37,7 +37,7 @@ public class Client {
     public int cols;
     public int rows;
 
-    public Client() {
+    public Client(String... args) {
         int[] size = TerminalManager.initFastTerminal("Cream CLI");
         this.cols = size[0];
         this.rows = size[1];
@@ -54,8 +54,14 @@ public class Client {
             this.viewManager.navigator.files.setDirectoryChangeListener(this::saveDirectoryState);
         }
 
+        // Open file from command-line argument (e.g. cream Client.java)
+        File argFile = (args != null && args.length > 0) ? new File(args[0]) : null;
+        if (argFile != null && argFile.exists() && argFile.isFile() && this.viewManager.editor != null) {
+            this.viewManager.editor.fileManager.loadFile(argFile);
+            EditorFileManager.saveDirectoryOnly(argFile.getParentFile());
+            this.showEditor();
         // Restore last session
-        if (this.viewManager.editor != null && this.viewManager.editor.fileManager.restoreEditorState()) {
+        } else if (this.viewManager.editor != null && this.viewManager.editor.fileManager.restoreEditorState()) {
             this.showEditor();
         } else {
             File lastDir = EditorFileManager.readLastDir();
