@@ -205,14 +205,20 @@ public class MouseHandler implements FastMouseListener {
             }
 
             if (newTarget != null && fm.getCurrentComponent() != newTarget) {
+                System.out.println("[DEBUG-CLICK] Changing focus from " + fm.getCurrentComponent() + " to " + newTarget);
                 fm.setCurrentComponent(newTarget);
             }
 
-            if (fm != null && fm.dispatchMouseClick(mouseCell[0], mouseCell[1], true)) {
-                client.repaint();
-                return;
+            if (fm != null) {
+                boolean handled = fm.dispatchMouseClick(mouseCell[0], mouseCell[1], true);
+                System.out.println("[DEBUG-CLICK] fm.dispatchMouseClick returned " + handled + " for currentComponent " + fm.getCurrentComponent());
+                if (handled) {
+                    client.repaint();
+                    return;
+                }
             }
 
+            System.out.println("[DEBUG-CLICK] Dispatching to container for hit component: " + hit);
             EventDispatcher.dispatchMouseClick(container, mouseCell[0], mouseCell[1], true);
         } else {
             if (draggedComponent instanceof Interactive ic) {
