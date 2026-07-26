@@ -1,7 +1,6 @@
 package cream.cli;
 
 import cream.cli.control.Events;
-import cream.cli.model.util.Console;
 import cream.cli.view.ViewManager;
 import cream.cli.view.editor.Editor;
 import cream.cli.view.editor.EditorFileManager;
@@ -16,6 +15,8 @@ import fastansi.FastANSI;
 import fastterminal.FastTerminalRenderer;
 import fastterminal.FastTerminalScene;
 import fasttui.component.Container;
+
+import java.io.File;
 
 public class Client {
 
@@ -57,7 +58,7 @@ public class Client {
         if (this.viewManager.editor != null && this.viewManager.editor.fileManager.restoreEditorState()) {
             this.showEditor();
         } else {
-            java.io.File lastDir = EditorFileManager.readLastDir();
+            File lastDir = EditorFileManager.readLastDir();
             if (lastDir != null && this.viewManager.navigator != null) {
                 this.viewManager.navigator.files.navigateTo(lastDir);
             }
@@ -88,15 +89,19 @@ public class Client {
         this.repaint();
     }
 
-    /** Called by EditorController before switching to the explorer. Persists file + caret. */
+    /**
+     * Called by EditorController before switching to the explorer. Persists file + caret.
+     */
     public void saveState() {
         if (this.viewManager != null && this.viewManager.editor != null) {
             this.viewManager.editor.fileManager.saveEditorState();
         }
     }
 
-    /** Called when the navigator enters a different directory. */
-    public void saveDirectoryState(java.io.File dir) {
+    /**
+     * Called when the navigator enters a different directory.
+     */
+    public void saveDirectoryState(File dir) {
         EditorFileManager.saveDirectoryState(dir);
     }
 
@@ -104,6 +109,13 @@ public class Client {
         System.out.print(FastANSI.CLEAR_SCREEN + FastANSI.CURSOR_HOME);
         if (this.renderEngine != null) {
             this.renderEngine.clearPrev();
+        }
+        // Navigate the file browser to the directory of the currently open file
+        if (this.viewManager.navigator != null && this.viewManager.editor != null) {
+            java.io.File current = this.viewManager.editor.fileManager.getCurrentFile();
+            if (current != null && current.getParentFile() != null) {
+                this.viewManager.navigator.files.navigateTo(current.getParentFile());
+            }
         }
         this.viewManager.showExplorer();
         this.repaint();
