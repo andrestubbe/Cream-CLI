@@ -18,6 +18,7 @@ public enum EditorAction {
     DUPLICATE_LINE,
     MOVE_LINE_UP,
     MOVE_LINE_DOWN,
+    TOGGLE_COMMENT,
 
     // Navigation
     MOVE_UP,

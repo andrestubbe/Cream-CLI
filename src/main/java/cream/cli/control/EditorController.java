@@ -107,6 +107,7 @@ public class EditorController implements FocusTarget {
             case TAB             -> { for (int i = 0; i < 4; i++) editor.docOps.insertChar(' '); }
 
             // --- Line operations (Eclipse-style, stubs ready for implementation) ---
+            case TOGGLE_COMMENT  -> editor.docOps.toggleComment();
             case DELETE_LINE     -> editor.docOps.deleteCurrentLine();
             case MOVE_LINE_UP    -> editor.docOps.moveLineUp();
             case MOVE_LINE_DOWN  -> editor.docOps.moveLineDown();

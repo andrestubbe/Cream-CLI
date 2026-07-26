@@ -88,7 +88,9 @@ public class KeyMap {
         m.bind(KeyCombo.ctrlShift(Keys.LEFT), EditorAction.MOVE_WORD_LEFT);
         m.bind(KeyCombo.ctrlShift(Keys.RIGHT), EditorAction.MOVE_WORD_RIGHT);
 
-        // Editing
+        // Editing & Comments
+        m.bind(KeyCombo.ctrl(Keys.OEM_2),      EditorAction.TOGGLE_COMMENT); // Ctrl + /
+        m.bind(KeyCombo.ctrl(Keys.DIVIDE),     EditorAction.TOGGLE_COMMENT); // Ctrl + Numpad /
         m.bind(KeyCombo.plain(Keys.ENTER),     EditorAction.NEWLINE);
         m.bind(KeyCombo.plain(Keys.BACKSPACE), EditorAction.BACKSPACE);
         m.bind(KeyCombo.plain(Keys.DELETE),    EditorAction.DELETE);
