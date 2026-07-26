@@ -183,18 +183,18 @@ public class MouseHandler implements FastMouseListener {
             }
 
             // Omnibox Popups FocusTarget Interception
-            if (omnibox != null) {
-                Popup activePopup = null;
-                if (omnibox.popupModel != null && omnibox.popupModel.isVisible()) activePopup = omnibox.popupModel;
-                else if (omnibox.popupService != null && omnibox.popupService.isVisible()) activePopup = omnibox.popupService;
-                else if (omnibox.popupMode != null && omnibox.popupMode.isVisible()) activePopup = omnibox.popupMode;
-
-                if (activePopup != null) {
-                    activePopup.handleMouseClick(mouseCell[0], mouseCell[1], true);
-                    client.repaint();
-                    return;
-                }
-            }
+            // if (omnibox != null) {
+            //     Popup activePopup = null;
+            //     if (omnibox.popupModel != null && omnibox.popupModel.isVisible()) activePopup = omnibox.popupModel;
+            //     else if (omnibox.popupService != null && omnibox.popupService.isVisible()) activePopup = omnibox.popupService;
+            //     else if (omnibox.popupMode != null && omnibox.popupMode.isVisible()) activePopup = omnibox.popupMode;
+            //
+            //     if (activePopup != null) {
+            //         activePopup.handleMouseClick(mouseCell[0], mouseCell[1], true);
+            //         client.repaint();
+            //         return;
+            //     }
+            // }
 
             Component hit = EventDispatcher.findComponentAt(container, mouseCell[0], mouseCell[1]);
             draggedComponent = hit;
@@ -224,8 +224,8 @@ public class MouseHandler implements FastMouseListener {
                 for (Behaviour b : ic.getBehaviors()) {
                     b.onMouseReleased(draggedComponent, mouseCell[0], mouseCell[1]);
                 }
-            } else {
-                EventDispatcher.dispatchMouseClick(container, mouseCell[0], mouseCell[1], false);
+            } else if (draggedComponent != null) {
+                EventDispatcher.dispatchMouseClick(draggedComponent, mouseCell[0], mouseCell[1], false);
             }
             draggedComponent = null;
         }
