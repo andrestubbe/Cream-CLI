@@ -64,7 +64,7 @@ public class Omnibox extends Container implements Interactive {
 
         this.behaviors.add(new InputBehaviour(this.text));
 
-        this.footer = new Footer(0, 3, this.width, runnable0, runnable1, runnable2);
+        this.footer = new Footer(1, this.y + 3, this.width, runnable0, runnable1, runnable2);
 
         this.add(this.box);
         this.add(this.symbol);
@@ -96,7 +96,7 @@ public class Omnibox extends Container implements Interactive {
 
     @Override
     public boolean contains(int cellX, int cellY) {
-        return cellX >= x && cellX < x + width && cellY >= y && cellY < y + height;
+        return cellX >= x && cellX < x + width && cellY >= y && cellY < y + box.getHeight();
     }
 
     public void adjustHeight(int terminalRows) {
@@ -114,7 +114,7 @@ public class Omnibox extends Container implements Interactive {
             text.setY(this.y + 1);
             text.setHeight(desiredTextHeight);
             if (footer != null) {
-                footer.relayout(this.y + currentTotalHeight, this.width);
+                footer.relayout(this.y + 3, this.width);
             }
         }
     }
