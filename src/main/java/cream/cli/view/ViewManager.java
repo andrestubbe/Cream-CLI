@@ -71,9 +71,9 @@ public class ViewManager {
         this.omnibox = new Omnibox(cols, rows);
 
         this.omniboxTextController = new OmniboxTextController(this.omnibox, this.workspaceModel, client);
-        this.omniboxModeController = new OmniboxButtonController(this.omnibox.mode, this.omnibox.popupMode, this.focusManager);
-        this.omniboxServiceController = new OmniboxButtonController(this.omnibox.service, this.omnibox.popupService, this.focusManager);
-        this.omniboxModelController = new OmniboxButtonController(this.omnibox.model, this.omnibox.popupModel, this.focusManager);
+        this.omniboxModeController = new OmniboxButtonController(this.omnibox.footer.mode, this.omnibox.popupMode, this.focusManager);
+        this.omniboxServiceController = new OmniboxButtonController(this.omnibox.footer.service, this.omnibox.popupService, this.focusManager);
+        this.omniboxModelController = new OmniboxButtonController(this.omnibox.footer.model, this.omnibox.popupModel, this.focusManager);
 
         this.focusManager.registerTarget(this.filesController);
         this.focusManager.registerTarget(this.editorController);
@@ -101,12 +101,11 @@ public class ViewManager {
             @Override
             public void onActiveFileChanged(File newFile) {
                 if (newFile != null) {
-                    FileCategory cat = FileCategory.fromPath(newFile.getName());
-                    if (cat == FileCategory.IMAGE) {
+                    String name = newFile.getName().toLowerCase();
+                    if (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".gif") || name.endsWith(".bmp") || name.endsWith(".svg")) {
                         showImageViewer(newFile);
-                    } else if (cat.isOpenableInEditor()) {
+                    } else {
                         editor.fileManager.loadFile(newFile);
-                        pathHeader.setOverridePath(newFile.getAbsolutePath());
                         showEditor();
                     }
                 } else {
@@ -139,6 +138,7 @@ public class ViewManager {
         this.container.add(this.editor);
         this.container.add(this.imageViewer);
         this.container.add(this.omnibox);
+        this.container.add(this.omnibox.footer);
         this.container.add(this.resultSearch);
         this.container.add(this.resultProgress);
 //      this.container.add(this.heatmap);

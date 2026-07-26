@@ -3,18 +3,14 @@ package cream.cli.view.omnibox;
 import cream.cli.Theme;
 import fasttui.behaviour.Behaviour;
 import fasttui.component.*;
-import fasttui.composable.Button;
 import fasttui.composable.MultilineTextBox;
 import fasttui.composable.TextInput;
-import fasttui.layout.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Omnibox extends Container implements Interactive {
 
-    public static final ColorSet OMNIBOX_DROPDOWN_MODE_BACKGROUND_SET = Theme.OMNIBOX_MODE_BACKGROUND_SET;
-    public static final ColorSet OMNIBOX_DROPDOWN_MODE_FOREGROUND_SET = Theme.OMNIBOX_MODE_FOREGROUND_SET;
     public static final int COLOR_FOCUSSED_BACKGROUND = Theme.OMNIBOX_FOCUSSED_BACKGROUND;
     public static final int COLOR_FOCUSSED_BORDER = Theme.OMNIBOX_FOCUSSED_BORDER;
     public static final int COLOR_HOVERED_BACKGROUND = Theme.OMNIBOX_HOVERED_BACKGROUND;
@@ -25,19 +21,14 @@ public class Omnibox extends Container implements Interactive {
     public final Box box;
     public final MultilineTextBox text;
     private final TextField symbol;
-    public final Button mode;
-    public final Button service;
-    public final Button model;
-    public final TextField context;
-    public final TextField cost;
-    public final LinearLayout layout;
     public final PopupMode popupMode;
     public final PopupService popupService;
     public final PopupModel popupModel;
+    public final OmniboxFooter footer;
     private final List<Behaviour> behaviors = new ArrayList<>();
 
     public Omnibox(int cols, int rows) {
-        super(1, rows - 4, cols - 2, rows);
+        super(1, rows - 4, cols - 2, 3);
 
         this.popupMode = new PopupMode(cols, rows);
         this.popupMode.setVisible(false);
@@ -45,9 +36,9 @@ public class Omnibox extends Container implements Interactive {
         this.popupService.setVisible(false);
         this.popupModel = new PopupModel(cols, rows);
         this.popupModel.setVisible(false);
-        final Runnable runnable0 = () -> this.popupMode.setVisible((!this.popupMode.isVisible()));
-        final Runnable runnable1 = () -> this.popupService.setVisible((!this.popupService.isVisible()));
-        final Runnable runnable2 = () -> this.popupModel.setVisible((!this.popupModel.isVisible()));
+        final Runnable runnable0 = () -> this.popupMode.setVisible(!this.popupMode.isVisible());
+        final Runnable runnable1 = () -> this.popupService.setVisible(!this.popupService.isVisible());
+        final Runnable runnable2 = () -> this.popupModel.setVisible(!this.popupModel.isVisible());
 
         this.box = new Box(0, 0, this.width, 3);
         this.box.setBorderStyle(BorderStyle.ROUNDED);
@@ -69,31 +60,11 @@ public class Omnibox extends Container implements Interactive {
 
         this.behaviors.add(new InputBehaviour(this.text));
 
-        this.mode = new Button(0, 0, " Auto ↑", 1, OMNIBOX_DROPDOWN_MODE_BACKGROUND_SET, OMNIBOX_DROPDOWN_MODE_FOREGROUND_SET, runnable0);
-
-        this.service = new Button(0, 0, "Llama ↑", 1, Theme.OMNIBOX_BUTTON_BACKGROUND_SET, Theme.OMNIBOX_BUTTON_FOREGROUND_SET, runnable1);
-
-        this.model = new Button(0, 0, "qwen2.5:3b ↑", 1, Theme.OMNIBOX_BUTTON_BACKGROUND_SET, Theme.OMNIBOX_BUTTON_FOREGROUND_SET, runnable2);
-
-        this.context = new TextField(0, 0, "(4,073)", Theme.OMNIBOX_INFORMATION_FOREGROUND);
-        this.context.setBackgroundColor(Theme.TRANSPARENT);
-
-        this.cost = new TextField(0, 0, "$0.00", Theme.OMNIBOX_INFORMATION_FOREGROUND);
-        this.cost.setBackgroundColor(Theme.TRANSPARENT);
-
-        final List<Component> horizontal = List.of(this.mode, this.service, this.model, this.context, this.cost);
-        this.layout = new LinearLayout(LinearLayout.Direction.HORIZONTAL, LinearLayout.Alignment.LEFT, 1);
-        this.layout.layout(0, 3, this.width, this.height, horizontal);
-        this.layout.setSpacing(0);
+        this.footer = new OmniboxFooter(0, 3, this.width, runnable0, runnable1, runnable2);
 
         this.add(this.box);
         this.add(this.symbol);
         this.add(this.text);
-        this.add(this.mode);
-        this.add(this.service);
-        this.add(this.model);
-        this.add(this.context);
-        this.add(this.cost);
     }
 
     private TextInput.StateChangeListener getTextStateChangeListener() {
@@ -121,7 +92,7 @@ public class Omnibox extends Container implements Interactive {
 
     @Override
     public boolean contains(int cellX, int cellY) {
-        return cellX >= x && cellX < x + width && cellY >= y && cellY < y + box.getHeight();
+        return cellX >= x && cellX < x + width && cellY >= y && cellY < y + height;
     }
 
     public void adjustHeight(int terminalRows) {
@@ -138,9 +109,9 @@ public class Omnibox extends Container implements Interactive {
             symbol.setY(this.y + 1);
             text.setY(this.y + 1);
             text.setHeight(desiredTextHeight);
-            final List<Component> horizontal = List.of(this.mode, this.service, this.model, this.context, this.cost);
-            this.layout.layout(0, desiredTextHeight + 1, this.width, this.height, horizontal);
+            if (footer != null) {
+                footer.relayout(this.y + currentTotalHeight, this.width);
+            }
         }
     }
-
 }
