@@ -89,6 +89,7 @@ public class KeyMap {
         m.bind(KeyCombo.ctrlShift(Keys.RIGHT), EditorAction.MOVE_WORD_RIGHT);
 
         // Editing & Comments
+        m.bind(KeyCombo.ctrl(Keys.KEY_7),      EditorAction.TOGGLE_COMMENT); // Ctrl + 7 (German layout /)
         m.bind(KeyCombo.ctrl(Keys.OEM_2),      EditorAction.TOGGLE_COMMENT); // Ctrl + /
         m.bind(KeyCombo.ctrl(Keys.DIVIDE),     EditorAction.TOGGLE_COMMENT); // Ctrl + Numpad /
         m.bind(KeyCombo.plain(Keys.ENTER),     EditorAction.NEWLINE);
