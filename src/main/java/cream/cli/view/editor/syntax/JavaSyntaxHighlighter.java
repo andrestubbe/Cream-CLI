@@ -153,7 +153,11 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                 int color = Theme.SYNTAX_IDENTIFIER;
                 byte style = FastStyle.NONE;
 
-                if (isKeyword(word)) {
+                if (word.equals("this") || word.equals("super")) {
+                    color = Theme.SYNTAX_THIS;
+                    style = FastStyle.ITALIC;
+                    wasType = false;
+                } else if (isKeyword(word)) {
                     color = Theme.SYNTAX_KEYWORD;
                     wasType = isPrimitiveTypeKeyword(word);
                     if (isVisibilityKeyword(word)) wasVisibility = true;

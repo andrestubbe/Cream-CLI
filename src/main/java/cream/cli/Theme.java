@@ -177,6 +177,7 @@ public class Theme {
     public static final int SYNTAX_METHOD = 0x61AFEF;
     public static final int SYNTAX_FIELD = 0xE5C07B;
     public static final int SYNTAX_CONSTANT = 0xDA70D6;
+    public static final int SYNTAX_THIS = 0xF7768E;
 
     // XML Specific Syntax Colors
     public static final int SYNTAX_XML_TAG = 0x7AA2F7;
