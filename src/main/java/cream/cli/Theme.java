@@ -172,6 +172,8 @@ public class Theme {
     public static final int SYNTAX_BRACE = 0x8992A7;
     public static final int SYNTAX_PAREN = 0xA9B1D6;
     public static final int SYNTAX_OPERATOR = 0x89DDFF;
+    public static final int SYNTAX_PARAMETER = 0xE0AF68;
+    public static final int SYNTAX_LOCAL_VARIABLE = 0xC0CAF5;
 
     // XML Specific Syntax Colors
     public static final int SYNTAX_XML_TAG = 0x7AA2F7;
