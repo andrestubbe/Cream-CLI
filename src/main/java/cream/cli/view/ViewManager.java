@@ -142,9 +142,9 @@ public class ViewManager {
         this.container.add(this.resultSearch);
         this.container.add(this.resultProgress);
 //      this.container.add(this.heatmap);
-        this.container.add(this.omnibox.popupMode);
-        this.container.add(this.omnibox.popupService);
-        this.container.add(this.omnibox.popupModel);
+//      this.container.add(this.omnibox.popupMode);
+//      this.container.add(this.omnibox.popupService);
+//      this.container.add(this.omnibox.popupModel);
         this.container.add(this.editor.autocompleteMgr.getAutocompletePopup());
         this.container.add(this.dialog);
     }
