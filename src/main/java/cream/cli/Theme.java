@@ -159,6 +159,7 @@ public class Theme {
     public static final int EDITOR_CARET_FG = 0x1A1A2E;
     public static final int EDITOR_CURRENT_LINE_BG = 0x333a5b;
     public static final int EDITOR_NUMBERS = 0x3a4160;
+    public static final int EDITOR_HYPERLINK_FG = 0x4EC9B0;
 
     public static final int SYNTAX_DEFAULT = 0xCCCCCC;
     public static final int SYNTAX_COMMENT = 0x565F89;

@@ -20,12 +20,11 @@ public class Client {
 
     public static void main(String[] args) {
         System.setProperty("sun.java2d.uiScale", "1.0");
-
         TerminalManager.setupTerminalState();
         TerminalManager.setupCreamLog();
         Thread thread = new Thread(Client::new);
         thread.start();
-//        new Console();
+        //new Console();
     }
 
     private final RenderEngine renderEngine;
