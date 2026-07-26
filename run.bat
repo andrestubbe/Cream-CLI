@@ -8,7 +8,7 @@ if not exist "%JAVA_HOME%\bin\javac.exe" (
 )
 set "PATH=%JAVA_HOME%\bin;%PATH%"
 
-call mvn clean compile dependency:build-classpath -Dmdep.outputFile=cp.txt -DincludeScope=runtime -q >nul 2>&1
+call mvn clean compile dependency:build-classpath "-Dmdep.outputFile=cp.txt" "-DincludeScope=runtime" -q >nul 2>&1
 if %ERRORLEVEL% NEQ 0 ( echo ❌ Build failed. & exit /b %ERRORLEVEL% )
 
 for /f "usebackq delims=" %%i in ("cp.txt") do set "CP=%%i"
