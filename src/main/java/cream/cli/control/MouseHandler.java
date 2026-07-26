@@ -5,6 +5,7 @@ import cream.cli.model.util.SymbolResolver;
 import cream.cli.view.editor.Editor;
 import cream.cli.view.files.Navigator;
 import cream.cli.view.omnibox.Omnibox;
+import cream.cli.view.ui.Popup;
 import fastmouse.FastMouseListener;
 import fastterminal.FastTerminal;
 import fasttui.behaviour.Behaviour;
@@ -184,16 +185,13 @@ public class MouseHandler implements FastMouseListener {
 
             // Omnibox Popups FocusTarget Interception
             if (omnibox != null) {
-                if (omnibox.popupModel != null && omnibox.popupModel.isVisible()) {
-                    omnibox.popupModel.handleMouseClick(mouseCell[0], mouseCell[1], true);
-                    client.repaint();
-                    return;
-                } else if (omnibox.popupService != null && omnibox.popupService.isVisible()) {
-                    omnibox.popupService.handleMouseClick(mouseCell[0], mouseCell[1], true);
-                    client.repaint();
-                    return;
-                } else if (omnibox.popupMode != null && omnibox.popupMode.isVisible()) {
-                    omnibox.popupMode.handleMouseClick(mouseCell[0], mouseCell[1], true);
+                Popup activePopup = null;
+                if (omnibox.popupModel != null && omnibox.popupModel.isVisible()) activePopup = omnibox.popupModel;
+                else if (omnibox.popupService != null && omnibox.popupService.isVisible()) activePopup = omnibox.popupService;
+                else if (omnibox.popupMode != null && omnibox.popupMode.isVisible()) activePopup = omnibox.popupMode;
+
+                if (activePopup != null) {
+                    activePopup.handleMouseClick(mouseCell[0], mouseCell[1], true);
                     client.repaint();
                     return;
                 }
