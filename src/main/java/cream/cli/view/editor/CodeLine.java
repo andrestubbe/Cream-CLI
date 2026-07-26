@@ -52,17 +52,28 @@ public class CodeLine extends Component {
         boolean isBlinkingOn = (System.currentTimeMillis() % 1000 < 500);
         Editor.HyperlinkRange link = editor.getHoveredHyperlink();
 
+        int strIdx = 0;
         for (int col = 0; col < renderLen; col++) {
-            boolean isCaret = (lineIsCurrent && col == editor.caret.getCol() && isBlinkingOn);
-            boolean isHyperlinked = (link != null && link.line() == docLine && col >= link.startCol() && col < link.endCol());
+            boolean isCaret = (lineIsCurrent && strIdx == editor.caret.getCol() && isBlinkingOn);
+            boolean isHyperlinked = (link != null && link.line() == docLine && strIdx >= link.startCol() && strIdx < link.endCol());
 
-            char ch = (col < len) ? text.charAt(col) : ' ';
-            int bg = isCaret ? EDITOR_CARET_BG : getBg(sel, docLine, col);
-            int fg = isCaret ? EDITOR_CARET_FG : (isHyperlinked ? Theme.EDITOR_HYPERLINK_FG : ((col < len) ? fgColors[col] : Theme.SYNTAX_DEFAULT));
+            int codePoint;
+            int step = 1;
+            if (strIdx < len) {
+                codePoint = text.codePointAt(strIdx);
+                step = Character.charCount(codePoint);
+            } else {
+                codePoint = ' ';
+            }
 
-            int style = isHyperlinked ? FastStyle.UNDERLINE : ((col < len && fontStyles != null) ? fontStyles[col] : FastStyle.NONE);
+            int bg = isCaret ? EDITOR_CARET_BG : getBg(sel, docLine, strIdx);
+            int fg = isCaret ? EDITOR_CARET_FG : (isHyperlinked ? Theme.EDITOR_HYPERLINK_FG : ((strIdx < len) ? fgColors[strIdx] : Theme.SYNTAX_DEFAULT));
 
-            scene.writeCell(x + col, y, ch, fg, bg, style);
+            int style = isHyperlinked ? FastStyle.UNDERLINE : ((strIdx < len && fontStyles != null) ? fontStyles[strIdx] : FastStyle.NONE);
+
+            scene.writeCell(x + col, y, codePoint, fg, bg, style);
+
+            strIdx += step;
         }
 
         // Caret beyond renderLen (if line is extremely long beyond viewport)
