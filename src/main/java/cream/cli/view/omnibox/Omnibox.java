@@ -121,7 +121,7 @@ public class Omnibox extends Container implements Interactive {
 
     @Override
     public boolean contains(int cellX, int cellY) {
-        return cellX >= x && cellX < x + width && cellY >= y && cellY < y + height;
+        return cellX >= x && cellX < x + width && cellY >= y && cellY < y + box.getHeight();
     }
 
     public void adjustHeight(int terminalRows) {
