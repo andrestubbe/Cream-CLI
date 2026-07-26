@@ -1,6 +1,10 @@
 package cream.cli.view.omnibox;
 
 import cream.cli.Theme;
+import cream.cli.view.footer.Footer;
+import cream.cli.view.footer.PopupMode;
+import cream.cli.view.footer.PopupModel;
+import cream.cli.view.footer.PopupService;
 import fasttui.behaviour.Behaviour;
 import fasttui.component.*;
 import fasttui.composable.MultilineTextBox;
@@ -24,7 +28,7 @@ public class Omnibox extends Container implements Interactive {
     public final PopupMode popupMode;
     public final PopupService popupService;
     public final PopupModel popupModel;
-    public final OmniboxFooter footer;
+    public final Footer footer;
     private final List<Behaviour> behaviors = new ArrayList<>();
 
     public Omnibox(int cols, int rows) {
@@ -60,7 +64,7 @@ public class Omnibox extends Container implements Interactive {
 
         this.behaviors.add(new InputBehaviour(this.text));
 
-        this.footer = new OmniboxFooter(0, 3, this.width, runnable0, runnable1, runnable2);
+        this.footer = new Footer(0, 3, this.width, runnable0, runnable1, runnable2);
 
         this.add(this.box);
         this.add(this.symbol);

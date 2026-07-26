@@ -1,4 +1,4 @@
-package cream.cli.view.omnibox;
+package cream.cli.view.footer;
 
 import cream.cli.Theme;
 import fasttui.component.ColorSet;
@@ -14,7 +14,7 @@ import java.util.List;
  * Pure View component for the Omnibox Footer bar in CreamCLI.
  * Contains the Mode, Service, Model dropdown buttons and Context/Cost info labels.
  */
-public class OmniboxFooter extends Container {
+public class Footer extends Container {
 
     public static final ColorSet OMNIBOX_DROPDOWN_MODE_BACKGROUND_SET = Theme.OMNIBOX_MODE_BACKGROUND_SET;
     public static final ColorSet OMNIBOX_DROPDOWN_MODE_FOREGROUND_SET = Theme.OMNIBOX_MODE_FOREGROUND_SET;
@@ -26,7 +26,7 @@ public class OmniboxFooter extends Container {
     public final TextField cost;
     public final LinearLayout layout;
 
-    public OmniboxFooter(int x, int y, int width, Runnable onMode, Runnable onService, Runnable onModel) {
+    public Footer(int x, int y, int width, Runnable onMode, Runnable onService, Runnable onModel) {
         super(x, y, width, 1);
 
         this.mode = new Button(0, 0, " Auto ↑", 1, OMNIBOX_DROPDOWN_MODE_BACKGROUND_SET, OMNIBOX_DROPDOWN_MODE_FOREGROUND_SET, onMode);
