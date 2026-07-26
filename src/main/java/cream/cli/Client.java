@@ -24,7 +24,18 @@ public class Client {
         TerminalManager.setupCreamLog();
         Thread thread = new Thread(Client::new);
         thread.start();
-        //new Console();
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
+        Console.getInstance().append("Test\n");
     }
 
     private final RenderEngine renderEngine;
@@ -47,6 +58,9 @@ public class Client {
         this.resultSearch = this.viewManager.resultSearch;
         this.resultProgress = this.viewManager.resultProgress;
         final Events events = new Events(this);
+        if (this.viewManager.editor != null && this.viewManager.editor.fileManager.restoreEditorState()) {
+            this.showEditor();
+        }
         this.renderEngine.clearPrev();
         this.repaint();
         this.renderEngine.startCaretBlinkThread(
