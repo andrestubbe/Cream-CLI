@@ -126,11 +126,10 @@ public class MouseHandler implements FastMouseListener {
             } else {
                 EventDispatcher.dispatchMouseDrag(container, absX, absY);
             }
+            client.repaint();
         } else {
             EventDispatcher.dispatchMouseMove(container, absX, absY);
         }
-
-        client.repaint();
     }
 
     @Override
