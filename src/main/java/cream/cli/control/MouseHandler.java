@@ -192,6 +192,14 @@ public class MouseHandler implements FastMouseListener {
                 newTarget = client.getViewManager().filesController;
             } else if (editor != null && editor.isVisible() && mouseCell[0] >= editor.getX() && mouseCell[0] < editor.getX() + editor.getWidth() && mouseCell[1] >= editor.getY() && mouseCell[1] < editor.getY() + editor.getHeight()) {
                 newTarget = client.getViewManager().editorController;
+            } else if (omnibox != null && omnibox.footer != null && mouseCell[1] == omnibox.footer.getY()) {
+                if (mouseCell[0] >= omnibox.footer.getX() + omnibox.footer.mode.getX() && mouseCell[0] < omnibox.footer.getX() + omnibox.footer.mode.getX() + omnibox.footer.mode.getWidth()) {
+                    newTarget = client.getViewManager().omniboxModeController;
+                } else if (mouseCell[0] >= omnibox.footer.getX() + omnibox.footer.service.getX() && mouseCell[0] < omnibox.footer.getX() + omnibox.footer.service.getX() + omnibox.footer.service.getWidth()) {
+                    newTarget = client.getViewManager().omniboxServiceController;
+                } else if (mouseCell[0] >= omnibox.footer.getX() + omnibox.footer.model.getX() && mouseCell[0] < omnibox.footer.getX() + omnibox.footer.model.getX() + omnibox.footer.model.getWidth()) {
+                    newTarget = client.getViewManager().omniboxModelController;
+                }
             } else if (omnibox != null && (hit == omnibox.text || (mouseCell[0] >= omnibox.getX() && mouseCell[0] < omnibox.getX() + omnibox.getWidth() && mouseCell[1] >= omnibox.getY() && mouseCell[1] < omnibox.getY() + omnibox.box.getHeight()))) {
                 newTarget = client.getViewManager().omniboxTextController;
             }
