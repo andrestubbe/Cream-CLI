@@ -27,7 +27,7 @@ public class OmniboxButtonController implements FocusTarget {
 
     @Override
     public boolean isFocused() {
-        return button != null && button.isVisible();
+        return focusManager != null && focusManager.getCurrentComponent() == this;
     }
 
     @Override
