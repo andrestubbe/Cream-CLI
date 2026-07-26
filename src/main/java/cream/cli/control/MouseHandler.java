@@ -36,6 +36,13 @@ public class MouseHandler implements FastMouseListener {
         this.omnibox = omnibox;
     }
 
+    private void logDebug(String msg) {
+        try {
+            File logFile = new File(System.getProperty("user.home") + File.separator + ".cream", "click_debug.log");
+            java.nio.file.Files.writeString(logFile.toPath(), msg + "\n", java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
+        } catch (Exception ignored) {}
+    }
+
     public void recheckHover() {
         if (mouseCell[0] >= 0 && mouseCell[1] >= 0) {
             onMouseMove(0, 0, 0, mouseCell[0], mouseCell[1]);
@@ -205,20 +212,20 @@ public class MouseHandler implements FastMouseListener {
             }
 
             if (newTarget != null && fm.getCurrentComponent() != newTarget) {
-                System.out.println("[DEBUG-CLICK] Changing focus from " + fm.getCurrentComponent() + " to " + newTarget);
+                logDebug("[DEBUG-CLICK] Changing focus from " + fm.getCurrentComponent() + " to " + newTarget);
                 fm.setCurrentComponent(newTarget);
             }
 
             if (fm != null) {
                 boolean handled = fm.dispatchMouseClick(mouseCell[0], mouseCell[1], true);
-                System.out.println("[DEBUG-CLICK] fm.dispatchMouseClick returned " + handled + " for currentComponent " + fm.getCurrentComponent());
+                logDebug("[DEBUG-CLICK] fm.dispatchMouseClick returned " + handled + " for currentComponent " + fm.getCurrentComponent());
                 if (handled) {
                     client.repaint();
                     return;
                 }
             }
 
-            System.out.println("[DEBUG-CLICK] Dispatching to container for hit component: " + hit);
+            logDebug("[DEBUG-CLICK] Dispatching to container for hit component: " + hit);
             EventDispatcher.dispatchMouseClick(container, mouseCell[0], mouseCell[1], true);
         } else {
             if (draggedComponent instanceof Interactive ic) {
