@@ -190,6 +190,19 @@ public class MouseHandler implements FastMouseListener {
                 }
             }
 
+            // Auto-close active omnibox popups when clicking anywhere outside
+            if (omnibox != null) {
+                if (omnibox.popupMode != null && omnibox.popupMode.isVisible() && !omnibox.popupMode.containsPoint(mouseCell[0], mouseCell[1])) {
+                    omnibox.popupMode.setVisible(false);
+                }
+                if (omnibox.popupService != null && omnibox.popupService.isVisible() && !omnibox.popupService.containsPoint(mouseCell[0], mouseCell[1])) {
+                    omnibox.popupService.setVisible(false);
+                }
+                if (omnibox.popupModel != null && omnibox.popupModel.isVisible() && !omnibox.popupModel.containsPoint(mouseCell[0], mouseCell[1])) {
+                    omnibox.popupModel.setVisible(false);
+                }
+            }
+
             Component hit = EventDispatcher.findComponentAt(container, mouseCell[0], mouseCell[1]);
             draggedComponent = hit;
 
