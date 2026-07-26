@@ -26,33 +26,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.EmojiList.executor": "Run",
-    "Application.PathAnimator.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/andre/Documents/2026-07-16-Work-CreamCLI",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.EmojiList.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PathAnimator.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/andre/Documents/2026-07-16-Work-Cream/2026-07-16-Work-CreamCLI&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="cream" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="cream.cli.view.omnibox" />
+      <recent name="cream.cli.view.input" />
       <recent name="cream.cli" />
     </key>
   </component>
   <component name="RunManager" selected="Application.EmojiList">
     <configuration name="EmojiList" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="cream.cli.model.util.EmojiList" />
+      <option name="MAIN_CLASS_NAME" value="cream.cli.test.EmojiList" />
       <module name="CreamCLI" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cream.cli.model.util.*" />
+          <option name="PATTERN" value="cream.cli.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

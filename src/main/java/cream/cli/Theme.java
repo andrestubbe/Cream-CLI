@@ -1,34 +1,11 @@
 package cream.cli;
 
+import fasttui.component.BorderStyle;
 import fasttui.component.ColorSet;
 
 import java.util.Map;
 
 public class Theme {
-
-    // --- Hauptpalette (Retro‑Synthwave / Accent Colors) ---
-
-    public static final int COLOR_1 = 0x4acdb8; // Mint Teal / Aqua Mint
-    public static final int COLOR_2 = 0x465373; // Slate Indigo / Steel Blue
-    public static final int COLOR_3 = 0xb93a50; // Crimson Berry / Raspberry Red
-    public static final int COLOR_4 = 0xfbb97f; // Soft Peach / Apricot Glow
-    public static final int COLOR_5 = 0xf0be75; // Warm Honey / Golden Sand
-    public static final int COLOR_6 = 0xbb3b53; // Deep Rose / Wine Raspberry
-    public static final int COLOR_7 = 0xb1d6a0; // Pastel Sage / Soft Green Tea
-    public static final int COLOR_8 = 0xa186d1; // Lavender Mist / Soft Purple Glow
-    public static final int COLOR_9 = 0xe40373; // Neon Magenta — greller Synthwave-Punch
-    public static final int COLOR_10 = 0x00e0ff; // Electric Cyan — greller CREAM-Glow
-
-// --- Dark Blue Night Mode Palette (Background / Depth Layers) ---
-
-    public static final int COLOR_BLUE_1 = 0x0c0e10; // Blackened Navy / Deep Space Blue
-    public static final int COLOR_BLUE_2 = 0x13141f; // Obsidian Blue / Midnight Indigo
-    public static final int COLOR_BLUE_3 = 0x363d54; // Graphite Blue / Slate Night
-    public static final int COLOR_BLUE_4 = 0x111727; // Dark Royal Blue / Abyss Blue
-    public static final int COLOR_BLUE_5 = 0x171a29; // Ink Blue / Shadow Navy
-    public static final int COLOR_BLUE_6 = 0x1e283a; // Storm Blue / Twilight Navy
-    public static final int COLOR_BLUE_7 = 0x22293e; // Iron Blue / Dusk Indigo
-    public static final int COLOR_BLUE_8 = 0x373e59; // Steel Indigo / Lunar Blue
 
     public static final String ICON_OPEN_FOLDER = "📂 ";
     public static final String ICON_FOLDER = "📁 ";
@@ -106,58 +83,232 @@ public class Theme {
             Map.entry("tsv", "📊 ")
     );
 
-    //    public static final int FILE_NORMAL_BACKGROUND = TRANSPARENT;
-//    public static final int FILE_NORMAL_FOREGROUND = 0xCCCCCC;
-//    public static final int FILE_SELECTION_BACKGROUND = 0x222222;
-//    public static final int FILE_SELECTION_FOREGROUND = 0xFFFFFF;
-//    public static final int FILE_FOOTER = 0x71717A;
-//    public static final int FILE_INFORMATION = 0x71717A;
-    //
-    //    public static final int PATH_BACKGROUND = -1;
-    //    public static final int PATH_FOREGROUND = 0xCCCCCC;
-    //    public static final int SCROLL_BACKGROUND = TRANSPARENT;
-    //    public static final int SCROLL_FOREGROUND = 0x666666;
-    //    public static final int INPUT_BORDER = 0x222222;
-
     public static final int TRANSPARENT = -2;
-    public static final int BACKGROUND = COLOR_BLUE_2;
+    public static final int BACKGROUND = 0x222436;
     public static final int FOREGROUND = 0x95a8f1;
-    public static final int BORDER = COLOR_BLUE_8;
-
-    public static final int SCROLL_BACKGROUND = TRANSPARENT;
-    public static final int SCROLL_FOREGROUND = 0x666666;
-    public static final int EDITOR_NUMBERS = 0x444444;
-
-    public static final int INPUT_COMMAND_BORDER_NORMAL_FOREGROUND = COLOR_BLUE_8;
-    public static final int INPUT_COMMAND_BORDER_NORMAL_BACKGROUND = BACKGROUND;
-
-    public static final int DROPDOWN_NORMAL_BACKGROUND = TRANSPARENT;
-    public static final int DROPDOWN_NORMAL_FOREGROUND = 0x777777;
-    public static final int DROPDOWN_HOVER_BACKGROUND = TRANSPARENT;
-    public static final int DROPDOWN_HOVER_FOREGROUND = 0x999999;
-    public static final int DROPDOWN_PRESSED_BACKGROUND = 0x222222;
-    public static final int DROPDOWN_PRESSED_FOREGROUND = 0xFFFFFF;
-
-    public static final ColorSet inputBackground = new ColorSet(-2, 0x24293e, 0x24293e, 0x24293e);
-    public static final ColorSet inputIndicator = new ColorSet(-2, 0x95a8f1, 0xFFFFFF, 0x95a8f1);
-    public static final ColorSet inputForeground = new ColorSet(0x95a8f1, 0xc3cdf7, 0xc3cdf7, 0x95a8f1);
-    public static final ColorSet inputInformation = new ColorSet(0x596491, 0x596491, 0x596491, 0x596491);
-
-    public static final ColorSet legendTypeBackground = new ColorSet(COLOR_7, COLOR_7, 0x95a8f1, 0x95a8f1);
-    public static final ColorSet legendTypeForeground = new ColorSet(COLOR_BLUE_2, COLOR_BLUE_2, COLOR_BLUE_2, COLOR_BLUE_2);
-    public static final ColorSet legendDropdownBackground = new ColorSet(-2, -2, -2, -2);
-    public static final ColorSet legendDropdownForeground = new ColorSet(0x596491, 0x95a8f1, 0x596491, 0x95a8f1);
-    public static final ColorSet legendInformationBackground = new ColorSet(-2, -2, 0x24293e, 0x24293e);
-    public static final ColorSet legendInformationForeground = new ColorSet(COLOR_BLUE_8, 0xc3cdf7, 0xc3cdf7, 0x95a8f1);
+    public static final int BORDER = 0x373e59;
 
     public static final int COLOR_PATH_FOREGROUND = 0xa1d5ff;
-    public static final int COLOR_PATH_BACKGROUND = Theme.TRANSPARENT;
-    public static final int COLOR_FILE_NORMAL_BACKGROUND = TRANSPARENT;
-    public static final int COLOR_FILE_NORMAL_FOREGROUND = 0xCCCCCC;
-    public static final int COLOR_FILE_SELECTION_BACKGROUND = 0x333a5b;
-    public static final int COLOR_FILE_SELECTION_FOREGROUND = 0xc0d4ff;
-    public static final int COLOR_INFO_NORMAL_BACKGROUND = 0x373e59;
-    public static final int COLOR_INFO_SELECTED_BACKGROUND = 0x7ba3fb;
-    public static final int COLOR_FILE_FOOTER = 0x71717A;
+    public static final int COLOR_PATH_BACKGROUND = TRANSPARENT;
+    public static final int COLOR_PATH_SEPARATOR = 0x596491;
+    public static final int COLOR_PATH_FILE = 0x00e0ff;
+    public static final int COLOR_PATH_FILE_HOVER = 0x80f0ff;
+    public static final int COLOR_PATH_DIR_HOVER = 0xcce6ff;
 
+    public static final ColorSet PATH_HEADER_BACKGROUND = new ColorSet(
+            TRANSPARENT,
+            TRANSPARENT,
+            TRANSPARENT,
+            TRANSPARENT
+    );
+
+    public static final ColorSet PATH_HEADER_DIRECTORY_SET = new ColorSet(
+            COLOR_PATH_FOREGROUND,
+            COLOR_PATH_DIR_HOVER,
+            0xffffff,
+            COLOR_PATH_FOREGROUND
+    );
+
+    public static final ColorSet PATH_HEADER_SEPARATOR_SET = new ColorSet(
+            COLOR_PATH_SEPARATOR,
+            COLOR_PATH_SEPARATOR,
+            COLOR_PATH_SEPARATOR,
+            COLOR_PATH_SEPARATOR
+    );
+
+    public static final ColorSet PATH_HEADER_FILE_SET = new ColorSet(
+            COLOR_PATH_FILE,
+            COLOR_PATH_FILE_HOVER,
+            0xffffff,
+            COLOR_PATH_FILE
+    );
+
+    public static final int FILES_FILE_SELECTION_BACKGROUND = 0x333a5b;
+    public static final int FILES_FILE_SELECTION_FOREGROUND = 0xc0d4ff;
+    public static final int FILES_FILE_HOVER_BACKGROUND = 0x333a5b;
+    public static final int FILES_FILE_HOVER_FOREGROUND = 0xc0d4ff;
+    public static final int FILES_INFO_NORMAL_BACKGROUND = 0x4a517c;
+    public static final int FILES_INFO_SELECTED_BACKGROUND = 0x7ba3fb;
+    public static final int FILES_FOOTER = 0x4a517c;
+
+    public static final int FILES_COLUM_HEADER_BACKGROUND = 0x1e2030;
+    public static final ColorSet FILES_COLUM_HEADER_BACKGROUND_SET = new ColorSet(
+            TRANSPARENT,
+            TRANSPARENT,
+            TRANSPARENT,
+            TRANSPARENT
+    );
+    public static final ColorSet FILES_COLUM_HEADER_FOREGROUND_SET = new ColorSet(
+            0x4a517c,
+            0x4a517c,
+            0x4a517c,
+            0x4a517c
+    );
+
+    // --- Heatmap Colors ---
+    public static final int HEATMAP_YEAR_2005 = 0x5edacc;
+    public static final int HEATMAP_YEAR_2019 = 0x6d75bb;
+
+    // --- Settings Menu Colors ---
+    public static final int SETTINGS_BORDER = 0x777777;
+    public static final int SETTINGS_TEXT = 0x999999;
+
+    // --- Editor & Syntax Colors ---
+    public static final int EDITOR_SELECTION_BG = 0x3b4261;
+    public static final int EDITOR_CARET_BG = 0xAEAFAD;
+    public static final int EDITOR_CARET_FG = 0x1A1A2E;
+    public static final int EDITOR_CURRENT_LINE_BG = 0x333a5b;
+    public static final int EDITOR_NUMBERS = 0x3a4160;
+
+    public static final int SYNTAX_DEFAULT = 0xCCCCCC;
+    public static final int SYNTAX_COMMENT = 0x565F89;
+    public static final int SYNTAX_STRING = 0x9ECE6A;
+    public static final int SYNTAX_NUMBER = 0xFF9E64;
+    public static final int SYNTAX_IDENTIFIER = 0xC0CAF5;
+    public static final int SYNTAX_KEYWORD = 0xBB9AF7;
+    public static final int SYNTAX_TYPE = 0x2AC3DE;
+    public static final int SYNTAX_PUNCTUATION = 0xA9B1D6;
+
+    // XML Specific Syntax Colors
+    public static final int SYNTAX_XML_TAG = 0x7AA2F7;
+    public static final int SYNTAX_XML_ATTRIBUTE = 0xBB9AF7;
+    public static final int SYNTAX_XML_VALUE = 0x9ECE6A;
+    public static final int SYNTAX_XML_BRACKET = 0x89DDFF;
+    public static final int SYNTAX_XML_COMMENT = 0x565F89;
+
+    // Markdown Specific Syntax Colors
+    public static final int SYNTAX_MD_HEADER = 0x89DDFF;
+    public static final int SYNTAX_MD_BOLD = 0xFF9E64;
+    public static final int SYNTAX_MD_ITALIC = 0xE0AF68;
+    public static final int SYNTAX_MD_CODE = 0x9ECE6A;
+    public static final int SYNTAX_MD_LINK = 0x7AA2F7;
+    public static final int SYNTAX_MD_LIST = 0xF7768E;
+    public static final int SYNTAX_MD_QUOTE = 0x565F89;
+
+    // JSON Specific Syntax Colors
+    public static final int SYNTAX_JSON_KEY = 0x7AA2F7;
+    public static final int SYNTAX_JSON_STRING = 0x9ECE6A;
+    public static final int SYNTAX_JSON_NUMBER = 0xFF9E64;
+    public static final int SYNTAX_JSON_KEYWORD = 0xBB9AF7;
+    public static final int SYNTAX_JSON_BRACKET = 0x89DDFF;
+
+    // --- Input Component Colors ---
+    public static final int OMNIBOX_CARET_BG = 0xAEAFAD;
+    public static final int OMNIBOX_CARET_FG = 0x1A1A2E;
+
+    public static final int OMNIBOX_NORMAL_BACKGROUND = TRANSPARENT;
+    public static final int OMNIBOX_NORMAL_BORDER = 0x3b4261;
+    public static final int OMNIBOX_HOVERED_BACKGROUND = TRANSPARENT;
+    public static final int OMNIBOX_HOVERED_BORDER = 0x616ba3;
+    public static final int OMNIBOX_FOCUSSED_BACKGROUND = TRANSPARENT;
+    public static final int OMNIBOX_FOCUSSED_BORDER = 0x616ba3;
+
+    public static final int OMNIBOX_INFORMATION_BACKGROUND = TRANSPARENT;
+    public static final int OMNIBOX_INFORMATION_FOREGROUND = 0x373e59;
+
+    public static final ColorSet OMNIBOX_TEXT_BACKGROUND_SET = new ColorSet(
+            TRANSPARENT, // normal
+            TRANSPARENT, // hover
+            TRANSPARENT, // focus
+            TRANSPARENT  // press
+    );
+
+    public static final ColorSet OMNIBOX_TEXT_FOREGROUND_SET = new ColorSet(
+            0x95a8f1, // normal (0x95a8f1)
+            0xa1d5ff,   // hover
+            0xa1d5ff,   // focus
+            0xa1d5ff  // press
+    );
+
+    public static final ColorSet OMNIBOX_PLACEHOLDER_FOREGROUND_SET = new ColorSet(
+            0x3b4261, // normal (dimmed teal-blue)
+            0x616ba3, // hover (brighter soft blue)
+            0x616ba3, // focus (electric cyan-blue)
+            0x616ba3  // press
+    );
+
+    public static final ColorSet OMNIBOX_MODE_BACKGROUND_SET = new ColorSet(
+            0xb1d6a0,
+            0xb1d6a0,
+            0x95a8f1,
+            0x95a8f1
+    );
+
+    public static final ColorSet OMNIBOX_MODE_FOREGROUND_SET = new ColorSet(
+            0x13141f,
+            0x13141f,
+            0x13141f,
+            0x13141f
+    );
+
+    public static final ColorSet OMNIBOX_BUTTON_BACKGROUND_SET = new ColorSet(
+            TRANSPARENT,
+            TRANSPARENT,
+            TRANSPARENT,
+            TRANSPARENT
+    );
+
+    public static final ColorSet OMNIBOX_BUTTON_FOREGROUND_SET = new ColorSet(
+            0x596491,
+            0x95a8f1,
+            0x596491,
+            0x95a8f1
+    );
+
+    public static final ColorSet SCROLLBAR_BACKGROUND_SET = new ColorSet(
+            TRANSPARENT,
+            0x2d3048,
+            0x2d3048,
+            0x2d3048
+    );
+
+    public static final ColorSet SCROLLBAR_FOREGROUND_SET = new ColorSet(
+            0x3b4261,
+            0xa1d5ff,
+            0xa1d5ff,
+            0xa1d5ff
+    );
+
+    public static final BorderStyle POPUP_BORDER_STYLE = BorderStyle.ROUNDED;
+    public static final int POPUP_BORDER = 0x606a9c;
+    public static final int POPUP_BACKGROUND_NORMAL = 0x26283d;
+    public static final int POPUP_FOREGROUND_NORMAL = 0xABB2BF;
+    public static final int POPUP_BACKGROUND_SELECTION = 0x2C313A;
+    public static final int POPUP_FOREGROUND_SELECTION = 0x61AFEF;
+    public static final int POPUP_MUTED = 0x5C6370;
+
+    public static final ColorSet POPUP_BACKGROUND_ROW_SET = new ColorSet(
+            -2,
+            0x30334f,
+            0x30334f,
+            0x30334f
+    );
+
+    public static final ColorSet POPUP_FOREGROUND_INDICATOR_SET = new ColorSet(
+            -2,
+            0x95a8f1,
+            0xFFFFFF,
+            0x95a8f1
+    );
+
+    public static final ColorSet POPUP_FOREGROUND_NORMAL_SET = new ColorSet(
+            0x95a8f1,
+            0xc3cdf7,
+            0xc3cdf7,
+            0x95a8f1
+    );
+
+    public static final ColorSet POPUP_FOREGROUND_INFORMATION_SET = new ColorSet(
+            0x596491,
+            0x596491,
+            0x596491,
+            0x596491
+    );
+
+    public static final int POPUP_FOREGROUND_SOURCE_JDK = 0xE5C07B;
+    public static final int POPUP_FOREGROUND_SOURCE_SRC = 0x98C379;
+    public static final int POPUP_FOREGROUND_SOURCE_MAVEN = 0x61AFEF;
+    public static final int POPUP_FOREGROUND_SOURCE_JAR = 0xC678DD;
+    public static final int POPUP_FOREGROUND_SOURCE_KEYWORD = 0xE06C75;
+    public static final int POPUP_FOREGROUND_SOURCE_SNIPPET = 0x56B6C2;
 }

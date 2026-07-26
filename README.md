@@ -109,8 +109,8 @@ Cream CLI is assembled from the following FastJava libraries:
 | [FastEmojis](https://github.com/andrestubbe/FastEmojis) | Emoji width and rendering support |
 | [FastAnimation](https://github.com/andrestubbe/FastAnimation) | Animation and transition engine |
 | [FastTween](https://github.com/andrestubbe/FastTween) | Tweening and easing functions |
-| [FastKeyboard](https://github.com/andrestubbe/FastKeyboard) | Native keyboard input handling |
-| [FastMouse](https://github.com/andrestubbe/FastMouse) | Native mouse input and events |
+| [FastKeyboard](https://github.com/andrestubbe/FastKeyboard) | Native keyboard omnibox handling |
+| [FastMouse](https://github.com/andrestubbe/FastMouse) | Native mouse omnibox and events |
 | [FastClipboard](https://github.com/andrestubbe/FastClipboard) | System clipboard integration |
 | [FastString](https://github.com/andrestubbe/FastString) | High-performance string utilities |
 | [FastBytes](https://github.com/andrestubbe/FastBytes) | Binary data manipulation |
