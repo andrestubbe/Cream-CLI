@@ -28,6 +28,7 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
         }
 
         boolean wasType = false;
+        boolean wasVisibility = false;
         int parenDepth = 0;
 
         int i = 0;
@@ -144,6 +145,7 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                 if (isKeyword(word)) {
                     color = Theme.SYNTAX_KEYWORD;
                     wasType = isPrimitiveTypeKeyword(word);
+                    if (isVisibilityKeyword(word)) wasVisibility = true;
                 } else if (isThisAccess) {
                     color = Theme.SYNTAX_FIELD;
                     activeFields.add(word);
@@ -158,7 +160,7 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                     if (parenDepth > 0) {
                         color = Theme.SYNTAX_PARAMETER;
                         activeParams.add(word);
-                    } else if (braceDepth <= 1) {
+                    } else if (braceDepth <= 1 || wasVisibility) {
                         color = Theme.SYNTAX_FIELD;
                         activeFields.add(word);
                     } else {
@@ -241,6 +243,13 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
     private static boolean isPrimitiveTypeKeyword(String w) {
         return switch (w) {
             case "int", "long", "double", "float", "boolean", "char", "byte", "short", "void", "var" -> true;
+            default -> false;
+        };
+    }
+
+    private static boolean isVisibilityKeyword(String w) {
+        return switch (w) {
+            case "private", "public", "protected" -> true;
             default -> false;
         };
     }
