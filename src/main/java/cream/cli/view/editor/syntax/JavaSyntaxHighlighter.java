@@ -10,6 +10,7 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
     private boolean inBlockComment = false;
     private final Set<String> activeParams = new HashSet<>();
     private final Set<String> activeVars = new HashSet<>();
+    private final Set<String> activeFields = new HashSet<>();
     private int braceDepth = 0;
 
     @Override
@@ -137,11 +138,16 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                 int nextIdx = i;
                 while (nextIdx < len && Character.isWhitespace(text.charAt(nextIdx))) nextIdx++;
                 boolean isMethodCall = (nextIdx < len && text.charAt(nextIdx) == '(') || (start >= 2 && text.substring(start - 2, start).equals("::"));
+                boolean isThisAccess = (start >= 5 && text.substring(start - 5, start).equals("this.")) || (start >= 6 && text.substring(start - 6, start).equals("super."));
 
                 int color = Theme.SYNTAX_IDENTIFIER;
                 if (isKeyword(word)) {
                     color = Theme.SYNTAX_KEYWORD;
                     wasType = isPrimitiveTypeKeyword(word);
+                } else if (isThisAccess) {
+                    color = Theme.SYNTAX_FIELD;
+                    activeFields.add(word);
+                    wasType = false;
                 } else if (isMethodCall && !isControlFlowKeyword(word)) {
                     color = Theme.SYNTAX_METHOD;
                     wasType = false;
@@ -152,6 +158,9 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                     if (parenDepth > 0) {
                         color = Theme.SYNTAX_PARAMETER;
                         activeParams.add(word);
+                    } else if (braceDepth <= 1) {
+                        color = Theme.SYNTAX_FIELD;
+                        activeFields.add(word);
                     } else {
                         color = Theme.SYNTAX_LOCAL_VARIABLE;
                         activeVars.add(word);
@@ -162,6 +171,9 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                     wasType = false;
                 } else if (activeVars.contains(word)) {
                     color = Theme.SYNTAX_LOCAL_VARIABLE;
+                    wasType = false;
+                } else if (activeFields.contains(word)) {
+                    color = Theme.SYNTAX_FIELD;
                     wasType = false;
                 } else {
                     wasType = false;
