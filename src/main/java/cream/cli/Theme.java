@@ -161,22 +161,22 @@ public class Theme {
     public static final int EDITOR_NUMBERS = 0x3a4160;
     public static final int EDITOR_HYPERLINK_FG = 0x4EC9B0;
 
-    public static final int SYNTAX_DEFAULT = 0xCCCCCC;
+    public static final int SYNTAX_DEFAULT = 0xC0CAF5;
     public static final int SYNTAX_COMMENT = 0x565F89;
     public static final int SYNTAX_STRING = 0x9ECE6A;
     public static final int SYNTAX_NUMBER = 0xFF9E64;
     public static final int SYNTAX_IDENTIFIER = 0xC0CAF5;
     public static final int SYNTAX_KEYWORD = 0xBB9AF7;
     public static final int SYNTAX_TYPE = 0x2AC3DE;
-    public static final int SYNTAX_PUNCTUATION = 0x7982A9;
-    public static final int SYNTAX_BRACE = 0x8992A7;
-    public static final int SYNTAX_PAREN = 0xA9B1D6;
+    public static final int SYNTAX_PUNCTUATION = 0x9ABDF5;
+    public static final int SYNTAX_BRACE = 0x89DDFF;
+    public static final int SYNTAX_PAREN = 0x9ABDF5;
     public static final int SYNTAX_OPERATOR = 0x89DDFF;
     public static final int SYNTAX_PARAMETER = 0xE0AF68;
     public static final int SYNTAX_LOCAL_VARIABLE = 0xC0CAF5;
-    public static final int SYNTAX_METHOD = 0x61AFEF;
-    public static final int SYNTAX_FIELD = 0xE5C07B;
-    public static final int SYNTAX_CONSTANT = 0xDA70D6;
+    public static final int SYNTAX_METHOD = 0x7AA2F7;
+    public static final int SYNTAX_FIELD = 0x73DACA;
+    public static final int SYNTAX_CONSTANT = 0xBB9AF7;
     public static final int SYNTAX_THIS = 0xF7768E;
 
     // XML Specific Syntax Colors
