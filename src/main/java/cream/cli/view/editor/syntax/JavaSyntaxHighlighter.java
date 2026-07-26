@@ -1,6 +1,7 @@
 package cream.cli.view.editor.syntax;
 
 import cream.cli.Theme;
+import fastterminal.FastStyle;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,11 +13,19 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
     private final Set<String> activeVars = new HashSet<>();
     private final Set<String> activeFields = new HashSet<>();
     private int braceDepth = 0;
+    private byte[] lastStyles;
+
+    @Override
+    public byte[] highlightStyles(String text) {
+        return lastStyles != null && lastStyles.length == text.length() ? lastStyles : new byte[text.length()];
+    }
 
     @Override
     public int[] highlight(String text) {
         int len = text.length();
         int[] fg = new int[len];
+        byte[] styles = new byte[len];
+        this.lastStyles = styles;
         Arrays.fill(fg, Theme.SYNTAX_DEFAULT);
 
         String trimmed = text.trim();
@@ -142,6 +151,8 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                 boolean isThisAccess = (start >= 5 && text.substring(start - 5, start).equals("this.")) || (start >= 6 && text.substring(start - 6, start).equals("super."));
 
                 int color = Theme.SYNTAX_IDENTIFIER;
+                byte style = FastStyle.NONE;
+
                 if (isKeyword(word)) {
                     color = Theme.SYNTAX_KEYWORD;
                     wasType = isPrimitiveTypeKeyword(word);
@@ -149,6 +160,10 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                 } else if (isThisAccess) {
                     color = Theme.SYNTAX_FIELD;
                     activeFields.add(word);
+                    wasType = false;
+                } else if (isConstantName(word)) {
+                    color = Theme.SYNTAX_CONSTANT;
+                    style = FastStyle.ITALIC;
                     wasType = false;
                 } else if (isMethodCall && !isControlFlowKeyword(word)) {
                     color = Theme.SYNTAX_METHOD;
@@ -182,6 +197,9 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                 }
 
                 Arrays.fill(fg, start, i, color);
+                if (style != FastStyle.NONE) {
+                    Arrays.fill(styles, start, i, style);
+                }
                 continue;
             }
 
@@ -238,6 +256,17 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
     private static boolean isType(String w) {
         if (w.isEmpty()) return false;
         return Character.isUpperCase(w.charAt(0)) || isPrimitiveTypeKeyword(w);
+    }
+
+    private static boolean isConstantName(String w) {
+        if (w.isEmpty() || isKeyword(w)) return false;
+        boolean hasUpper = false;
+        for (int i = 0; i < w.length(); i++) {
+            char ch = w.charAt(i);
+            if (Character.isLowerCase(ch)) return false;
+            if (Character.isUpperCase(ch)) hasUpper = true;
+        }
+        return hasUpper;
     }
 
     private static boolean isPrimitiveTypeKeyword(String w) {
