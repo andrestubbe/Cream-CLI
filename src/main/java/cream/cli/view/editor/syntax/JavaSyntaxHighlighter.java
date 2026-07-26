@@ -128,16 +128,23 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                 continue;
             }
 
-            // Identifier / keyword / type / parameter / variable
+            // Identifier / keyword / type / parameter / variable / method call
             if (Character.isJavaIdentifierStart(c)) {
                 int start = i;
                 while (i < len && Character.isJavaIdentifierPart(text.charAt(i))) i++;
                 String word = text.substring(start, i);
 
+                int nextIdx = i;
+                while (nextIdx < len && Character.isWhitespace(text.charAt(nextIdx))) nextIdx++;
+                boolean isMethodCall = (nextIdx < len && text.charAt(nextIdx) == '(') || (start >= 2 && text.substring(start - 2, start).equals("::"));
+
                 int color = Theme.SYNTAX_IDENTIFIER;
                 if (isKeyword(word)) {
                     color = Theme.SYNTAX_KEYWORD;
                     wasType = isPrimitiveTypeKeyword(word);
+                } else if (isMethodCall && !isControlFlowKeyword(word)) {
+                    color = Theme.SYNTAX_METHOD;
+                    wasType = false;
                 } else if (isType(word)) {
                     color = Theme.SYNTAX_TYPE;
                     wasType = true;
@@ -222,6 +229,13 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
     private static boolean isPrimitiveTypeKeyword(String w) {
         return switch (w) {
             case "int", "long", "double", "float", "boolean", "char", "byte", "short", "void", "var" -> true;
+            default -> false;
+        };
+    }
+
+    private static boolean isControlFlowKeyword(String w) {
+        return switch (w) {
+            case "if", "while", "for", "switch", "catch", "synchronized", "new" -> true;
             default -> false;
         };
     }

@@ -154,7 +154,7 @@ public class Theme {
     public static final int SETTINGS_TEXT = 0x999999;
 
     // --- Editor & Syntax Colors ---
-    public static final int EDITOR_SELECTION_BG = 0x3b4261;
+    public static final int EDITOR_SELECTION_BG = 0x214283;
     public static final int EDITOR_CARET_BG = 0xAEAFAD;
     public static final int EDITOR_CARET_FG = 0x1A1A2E;
     public static final int EDITOR_CURRENT_LINE_BG = 0x333a5b;
@@ -174,6 +174,7 @@ public class Theme {
     public static final int SYNTAX_OPERATOR = 0x89DDFF;
     public static final int SYNTAX_PARAMETER = 0xE0AF68;
     public static final int SYNTAX_LOCAL_VARIABLE = 0xC0CAF5;
+    public static final int SYNTAX_METHOD = 0x61AFEF;
 
     // XML Specific Syntax Colors
     public static final int SYNTAX_XML_TAG = 0x7AA2F7;
