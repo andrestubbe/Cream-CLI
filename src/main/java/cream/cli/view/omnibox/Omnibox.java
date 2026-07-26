@@ -89,6 +89,9 @@ public class Omnibox extends Container implements Interactive {
         this.add(this.box);
         this.add(this.symbol);
         this.add(this.text);
+        this.add(this.mode);
+        this.add(this.service);
+        this.add(this.model);
         this.add(this.context);
         this.add(this.cost);
     }
