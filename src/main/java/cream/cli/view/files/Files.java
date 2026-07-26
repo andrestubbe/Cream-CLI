@@ -104,6 +104,10 @@ public class Files extends Control {
         navigation.setFileOpenListener(listener);
     }
 
+    public void setDirectoryChangeListener(java.util.function.Consumer<java.io.File> listener) {
+        navigation.setDirectoryChangeListener(listener);
+    }
+
     public void navigateTo(java.io.File dir) {
         if (dir == null || !dir.isDirectory()) return;
         state.currentDirectory = dir;

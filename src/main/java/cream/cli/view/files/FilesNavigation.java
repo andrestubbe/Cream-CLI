@@ -1,9 +1,9 @@
 package cream.cli.view.files;
 
 import cream.cli.model.FileCategory;
-import cream.cli.view.editor.EditorFileManager;
 import java.io.File;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 public final class FilesNavigation {
 
@@ -11,6 +11,7 @@ public final class FilesNavigation {
     private final FilesDirectoryLoader loader;
     private final Runnable repaintTrigger;
     private FileOpenListener listener;
+    private Consumer<File> directoryChangeListener;
 
     public FilesNavigation(FilesState state, FilesDirectoryLoader loader, Runnable repaintTrigger) {
         this.state = state;
@@ -20,6 +21,10 @@ public final class FilesNavigation {
 
     public void setFileOpenListener(FileOpenListener listener) {
         this.listener = listener;
+    }
+
+    public void setDirectoryChangeListener(Consumer<File> listener) {
+        this.directoryChangeListener = listener;
     }
 
     public boolean openSelected() {
@@ -34,7 +39,7 @@ public final class FilesNavigation {
             state.currentDirectory = selected;
             syncWorkspaceModel();
             loader.load(state, repaintTrigger);
-            EditorFileManager.saveDirectoryState(selected);
+            if (directoryChangeListener != null) directoryChangeListener.accept(selected);
             return true;
         }
         openFile(selected);
@@ -49,7 +54,7 @@ public final class FilesNavigation {
         state.currentDirectory = parent;
         syncWorkspaceModel();
         loader.load(state, repaintTrigger);
-        if (parent != null) EditorFileManager.saveDirectoryState(parent);
+        if (parent != null && directoryChangeListener != null) directoryChangeListener.accept(parent);
         return true;
     }
 

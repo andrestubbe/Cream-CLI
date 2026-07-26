@@ -4,6 +4,7 @@ import cream.cli.control.Events;
 import cream.cli.model.util.Console;
 import cream.cli.view.ViewManager;
 import cream.cli.view.editor.Editor;
+import cream.cli.view.editor.EditorFileManager;
 import cream.cli.view.files.Navigator;
 import cream.cli.view.omnibox.Omnibox;
 import cream.cli.view.render.RenderEngine;
@@ -46,10 +47,17 @@ public class Client {
         this.resultSearch = this.viewManager.resultSearch;
         this.resultProgress = this.viewManager.resultProgress;
         final Events events = new Events(this);
+
+        // Register directory-change listener so Client controls persistence
+        if (this.viewManager.navigator != null) {
+            this.viewManager.navigator.files.setDirectoryChangeListener(this::saveDirectoryState);
+        }
+
+        // Restore last session
         if (this.viewManager.editor != null && this.viewManager.editor.fileManager.restoreEditorState()) {
             this.showEditor();
         } else {
-            java.io.File lastDir = cream.cli.view.editor.EditorFileManager.readLastDir();
+            java.io.File lastDir = EditorFileManager.readLastDir();
             if (lastDir != null && this.viewManager.navigator != null) {
                 this.viewManager.navigator.files.navigateTo(lastDir);
             }
@@ -78,6 +86,18 @@ public class Client {
         this.viewManager.handleTerminalResize(cols, rows);
         this.renderEngine.clearPrev();
         this.repaint();
+    }
+
+    /** Called by EditorController before switching to the explorer. Persists file + caret. */
+    public void saveState() {
+        if (this.viewManager != null && this.viewManager.editor != null) {
+            this.viewManager.editor.fileManager.saveEditorState();
+        }
+    }
+
+    /** Called when the navigator enters a different directory. */
+    public void saveDirectoryState(java.io.File dir) {
+        EditorFileManager.saveDirectoryState(dir);
     }
 
     public void showExplorer() {
