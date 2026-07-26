@@ -168,7 +168,10 @@ public class Theme {
     public static final int SYNTAX_IDENTIFIER = 0xC0CAF5;
     public static final int SYNTAX_KEYWORD = 0xBB9AF7;
     public static final int SYNTAX_TYPE = 0x2AC3DE;
-    public static final int SYNTAX_PUNCTUATION = 0xA9B1D6;
+    public static final int SYNTAX_PUNCTUATION = 0x7982A9;
+    public static final int SYNTAX_BRACE = 0x8992A7;
+    public static final int SYNTAX_PAREN = 0xA9B1D6;
+    public static final int SYNTAX_OPERATOR = 0x89DDFF;
 
     // XML Specific Syntax Colors
     public static final int SYNTAX_XML_TAG = 0x7AA2F7;
