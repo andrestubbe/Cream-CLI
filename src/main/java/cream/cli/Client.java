@@ -2,14 +2,14 @@ package cream.cli;
 
 import cream.cli.control.Events;
 import cream.cli.model.util.Console;
-import cream.cli.view.render.RenderEngine;
-import cream.cli.view.terminal.TerminalManager;
 import cream.cli.view.ViewManager;
 import cream.cli.view.editor.Editor;
 import cream.cli.view.files.Navigator;
 import cream.cli.view.omnibox.Omnibox;
+import cream.cli.view.render.RenderEngine;
 import cream.cli.view.result.ResultProgress;
 import cream.cli.view.result.ResultSearch;
+import cream.cli.view.terminal.TerminalManager;
 import cream.cli.view.ui.Dialog;
 import fastansi.FastANSI;
 import fastterminal.FastTerminalRenderer;
@@ -24,18 +24,6 @@ public class Client {
         TerminalManager.setupCreamLog();
         Thread thread = new Thread(Client::new);
         thread.start();
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
-        Console.getInstance().append("Test\n");
     }
 
     private final RenderEngine renderEngine;
@@ -60,6 +48,11 @@ public class Client {
         final Events events = new Events(this);
         if (this.viewManager.editor != null && this.viewManager.editor.fileManager.restoreEditorState()) {
             this.showEditor();
+        } else {
+            java.io.File lastDir = cream.cli.view.editor.EditorFileManager.readLastDir();
+            if (lastDir != null && this.viewManager.navigator != null) {
+                this.viewManager.navigator.files.navigateTo(lastDir);
+            }
         }
         this.renderEngine.clearPrev();
         this.repaint();
