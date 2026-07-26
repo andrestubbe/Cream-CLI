@@ -14,4 +14,4 @@ if not exist "cp.txt" (
 )
 
 for /f "usebackq delims=" %%i in ("cp.txt") do set "CP=%%i"
-java --enable-native-access=ALL-UNNAMED -cp "target\classes;%CP%" cream.cli.Client
+java -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 --enable-native-access=ALL-UNNAMED -cp "target\classes;%CP%" cream.cli.Client
