@@ -16,7 +16,6 @@ Cream CLI draws major inspiration from these classical developer workflows and t
 - **[Alfred](https://www.alfredapp.com/)**: Classic fuzzy-driven application launcher and productivity dashboard.
 - **[Rofi](https://github.com/davatorium/rofi)** & **[dmenu](https://tools.suckless.org/dmenu/)**: Fast, keyboard-controlled dynamic window manager menus.
 
-<!--
 
 ---
 
@@ -43,7 +42,7 @@ Instead of asking users to trust the AI, it lets them follow every step in real 
 You don't just receive the result — you watch it happen.
 
 ---
-
+<!--
 ## Vision — The Temporal Shell
 
 > *CREAM CLI is the command-line interface for the CREAM system — a time-based file explorer and timeline engine for temporal navigation, week/project timelines, and temporal reconstruction.*
@@ -80,7 +79,7 @@ cream timeline project FastJava --range 2025-01-01 2026-01-01
 | `rm` | `rmt` | Remove *at a time* |
 
 ---
-
+-->
 ## Features
 
 - Visual terminal
@@ -148,4 +147,4 @@ Cream CLI is assembled from the following FastJava libraries:
 
 *Part of the [FastJava Ecosystem](https://github.com/andrestubbe/FastJava) — Making the JVM faster.*
 
--->
+

@@ -169,7 +169,7 @@ public class Theme {
     public static final int SYNTAX_KEYWORD = 0xBB9AF7;
     public static final int SYNTAX_TYPE = 0x2AC3DE;
     public static final int SYNTAX_PUNCTUATION = 0x9ABDF5;
-    public static final int SYNTAX_BRACE = 0x89DDFF;
+    public static final int SYNTAX_BRACE = 0xa085d6;
     public static final int SYNTAX_PAREN = 0x9ABDF5;
     public static final int SYNTAX_OPERATOR = 0x89DDFF;
     public static final int SYNTAX_PARAMETER = 0xE0AF68;

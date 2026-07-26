@@ -4,6 +4,9 @@ import fastterminal.FastTerminalScene;
 import fasttui.component.Control;
 import fasttui.composable.ScrollVertical;
 
+import java.io.File;
+import java.util.function.Consumer;
+
 public class Files extends Control {
 
     private final FilesState state;
@@ -104,11 +107,11 @@ public class Files extends Control {
         navigation.setFileOpenListener(listener);
     }
 
-    public void setDirectoryChangeListener(java.util.function.Consumer<java.io.File> listener) {
+    public void setDirectoryChangeListener(Consumer<File> listener) {
         navigation.setDirectoryChangeListener(listener);
     }
 
-    public void navigateTo(java.io.File dir) {
+    public void navigateTo(File dir) {
         if (dir == null || !dir.isDirectory()) return;
         state.currentDirectory = dir;
         loader.load(state, repaintTrigger);

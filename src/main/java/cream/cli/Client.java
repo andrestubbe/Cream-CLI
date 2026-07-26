@@ -1,10 +1,12 @@
 package cream.cli;
 
 import cream.cli.control.Events;
+import cream.cli.model.util.Console;
 import cream.cli.view.ViewManager;
 import cream.cli.view.editor.Editor;
 import cream.cli.view.editor.EditorFileManager;
 import cream.cli.view.files.Navigator;
+import cream.cli.view.footer.Footer;
 import cream.cli.view.omnibox.Omnibox;
 import cream.cli.view.render.RenderEngine;
 import cream.cli.view.result.ResultProgress;
@@ -23,7 +25,7 @@ public class Client {
     public static void main(String[] args) {
         System.setProperty("sun.java2d.uiScale", "1.0");
         TerminalManager.setupTerminalState();
-        TerminalManager.setupCreamLog();
+        // TerminalManager.setupCreamLog();
         Thread thread = new Thread(() -> new Client(args));
         thread.start();
     }
@@ -60,7 +62,7 @@ public class Client {
             this.viewManager.editor.fileManager.loadFile(argFile);
             EditorFileManager.saveDirectoryOnly(argFile.getParentFile());
             this.showEditor();
-        // Restore last session
+            // Restore last session
         } else if (this.viewManager.editor != null && this.viewManager.editor.fileManager.restoreEditorState()) {
             this.showEditor();
         } else {
@@ -167,6 +169,10 @@ public class Client {
 
     public Omnibox getOmnibox() {
         return this.viewManager.omnibox;
+    }
+
+    public Footer getFooter() {
+        return this.viewManager.footer;
     }
 
     public Container getContainer() {

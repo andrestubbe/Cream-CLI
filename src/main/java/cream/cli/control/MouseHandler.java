@@ -4,8 +4,8 @@ import cream.cli.Client;
 import cream.cli.model.util.SymbolResolver;
 import cream.cli.view.editor.Editor;
 import cream.cli.view.files.Navigator;
+import cream.cli.view.footer.Footer;
 import cream.cli.view.omnibox.Omnibox;
-import cream.cli.view.ui.Popup;
 import fastmouse.FastMouseListener;
 import fastterminal.FastTerminal;
 import fasttui.behaviour.Behaviour;
@@ -23,24 +23,27 @@ public class MouseHandler implements FastMouseListener {
     private final Navigator navigator;
     private final Editor editor;
     private final Omnibox omnibox;
+    private final Footer footer;
 
     private final int[] mouseCell = {-1, -1};
     private boolean mouseDown = false;
     private Component draggedComponent = null;
 
-    public MouseHandler(Client client, Container container, Navigator navigator, Editor editor, Omnibox omnibox) {
+    public MouseHandler(Client client, Container container, Navigator navigator, Editor editor, Omnibox omnibox, Footer footer) {
         this.client = client;
         this.container = container;
         this.navigator = navigator;
         this.editor = editor;
         this.omnibox = omnibox;
+        this.footer = footer;
     }
 
     private void logDebug(String msg) {
         try {
             File logFile = new File(System.getProperty("user.home") + File.separator + ".cream", "click_debug.log");
             java.nio.file.Files.writeString(logFile.toPath(), msg + "\n", java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     public void recheckHover() {
@@ -107,20 +110,20 @@ public class MouseHandler implements FastMouseListener {
                 popup.setHoveredIndex(hoveredIdx);
             }
         } else if (omnibox != null) {
-            if (omnibox.popupModel != null && omnibox.popupModel.isVisible()) {
-                int idx = omnibox.popupModel.getItemIndexAt(absX, absY);
-                if (idx >= 0 && idx != omnibox.popupModel.getSelectedIndex()) {
-                    omnibox.popupModel.setHoveredIndex(idx);
+            if (this.footer.popupModel != null && this.footer.popupModel.isVisible()) {
+                int idx = this.footer.popupModel.getItemIndexAt(absX, absY);
+                if (idx >= 0 && idx != this.footer.popupModel.getSelectedIndex()) {
+                    this.footer.popupModel.setHoveredIndex(idx);
                 }
-            } else if (omnibox.popupService != null && omnibox.popupService.isVisible()) {
-                int idx = omnibox.popupService.getItemIndexAt(absX, absY);
-                if (idx >= 0 && idx != omnibox.popupService.getSelectedIndex()) {
-                    omnibox.popupService.setHoveredIndex(idx);
+            } else if (this.footer.popupService != null && this.footer.popupService.isVisible()) {
+                int idx = this.footer.popupService.getItemIndexAt(absX, absY);
+                if (idx >= 0 && idx != this.footer.popupService.getSelectedIndex()) {
+                    this.footer.popupService.setHoveredIndex(idx);
                 }
-            } else if (omnibox.popupMode != null && omnibox.popupMode.isVisible()) {
-                int idx = omnibox.popupMode.getItemIndexAt(absX, absY);
-                if (idx >= 0 && idx != omnibox.popupMode.getSelectedIndex()) {
-                    omnibox.popupMode.setHoveredIndex(idx);
+            } else if (this.footer.popupMode != null && this.footer.popupMode.isVisible()) {
+                int idx = this.footer.popupMode.getItemIndexAt(absX, absY);
+                if (idx >= 0 && idx != this.footer.popupMode.getSelectedIndex()) {
+                    this.footer.popupMode.setHoveredIndex(idx);
                 }
             }
         }
@@ -192,14 +195,14 @@ public class MouseHandler implements FastMouseListener {
 
             // Auto-close active omnibox popups when clicking anywhere outside
             if (omnibox != null) {
-                if (omnibox.popupMode != null && omnibox.popupMode.isVisible() && !omnibox.popupMode.containsPoint(mouseCell[0], mouseCell[1])) {
-                    omnibox.popupMode.setVisible(false);
+                if (this.footer.popupMode != null && this.footer.popupMode.isVisible() && !this.footer.popupMode.containsPoint(mouseCell[0], mouseCell[1])) {
+                    this.footer.popupMode.setVisible(false);
                 }
-                if (omnibox.popupService != null && omnibox.popupService.isVisible() && !omnibox.popupService.containsPoint(mouseCell[0], mouseCell[1])) {
-                    omnibox.popupService.setVisible(false);
+                if (this.footer.popupService != null && this.footer.popupService.isVisible() && !this.footer.popupService.containsPoint(mouseCell[0], mouseCell[1])) {
+                    this.footer.popupService.setVisible(false);
                 }
-                if (omnibox.popupModel != null && omnibox.popupModel.isVisible() && !omnibox.popupModel.containsPoint(mouseCell[0], mouseCell[1])) {
-                    omnibox.popupModel.setVisible(false);
+                if (this.footer.popupModel != null && this.footer.popupModel.isVisible() && !this.footer.popupModel.containsPoint(mouseCell[0], mouseCell[1])) {
+                    this.footer.popupModel.setVisible(false);
                 }
             }
 
@@ -212,12 +215,12 @@ public class MouseHandler implements FastMouseListener {
                 newTarget = client.getViewManager().filesController;
             } else if (editor != null && editor.isVisible() && mouseCell[0] >= editor.getX() && mouseCell[0] < editor.getX() + editor.getWidth() && mouseCell[1] >= editor.getY() && mouseCell[1] < editor.getY() + editor.getHeight()) {
                 newTarget = client.getViewManager().editorController;
-            } else if (omnibox != null && omnibox.footer != null && mouseCell[1] == omnibox.footer.getY()) {
-                if (mouseCell[0] >= omnibox.footer.getX() + omnibox.footer.mode.getX() && mouseCell[0] < omnibox.footer.getX() + omnibox.footer.mode.getX() + omnibox.footer.mode.getWidth()) {
+            } else if (omnibox != null && this.footer != null && mouseCell[1] == this.footer.getY()) {
+                if (mouseCell[0] >= this.footer.getX() + this.footer.mode.getX() && mouseCell[0] < this.footer.getX() + this.footer.mode.getX() + this.footer.mode.getWidth()) {
                     newTarget = client.getViewManager().omniboxModeController;
-                } else if (mouseCell[0] >= omnibox.footer.getX() + omnibox.footer.service.getX() && mouseCell[0] < omnibox.footer.getX() + omnibox.footer.service.getX() + omnibox.footer.service.getWidth()) {
+                } else if (mouseCell[0] >= this.footer.getX() + this.footer.service.getX() && mouseCell[0] < this.footer.getX() + this.footer.service.getX() + this.footer.service.getWidth()) {
                     newTarget = client.getViewManager().omniboxServiceController;
-                } else if (mouseCell[0] >= omnibox.footer.getX() + omnibox.footer.model.getX() && mouseCell[0] < omnibox.footer.getX() + omnibox.footer.model.getX() + omnibox.footer.model.getWidth()) {
+                } else if (mouseCell[0] >= this.footer.getX() + this.footer.model.getX() && mouseCell[0] < this.footer.getX() + this.footer.model.getX() + this.footer.model.getWidth()) {
                     newTarget = client.getViewManager().omniboxModelController;
                 }
             } else if (omnibox != null && (hit == omnibox.text || (mouseCell[0] >= omnibox.getX() && mouseCell[0] < omnibox.getX() + omnibox.getWidth() && mouseCell[1] >= omnibox.getY() && mouseCell[1] < omnibox.getY() + omnibox.box.getHeight()))) {

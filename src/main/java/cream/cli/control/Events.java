@@ -24,7 +24,7 @@ public class Events {
     }
 
     public void initMouse() {
-        this.mouseHandler = new MouseHandler(client, client.getContainer(), client.getNavigator(), client.getEditor(), client.getOmnibox());
+        this.mouseHandler = new MouseHandler(client, client.getContainer(), client.getNavigator(), client.getEditor(), client.getOmnibox(), client.getFooter());
         fastterminal.AnsiMouse.open(this.mouseHandler);
     }
 

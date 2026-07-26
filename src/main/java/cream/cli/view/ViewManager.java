@@ -13,6 +13,7 @@ import cream.cli.model.WorkspaceModel;
 import cream.cli.view.editor.Editor;
 import cream.cli.view.editor.ImageViewer;
 import cream.cli.view.files.Navigator;
+import cream.cli.view.footer.Footer;
 import cream.cli.view.header.PathHeader;
 import cream.cli.view.omnibox.Omnibox;
 import cream.cli.view.result.Heatmap;
@@ -34,6 +35,7 @@ public class ViewManager {
     public final ResultProgress resultProgress;
     public final Heatmap heatmap;
     public final Omnibox omnibox;
+    public final Footer footer;
 
     public final FocusManager focusManager = new FocusManager();
     public final FilesController filesController;
@@ -43,6 +45,7 @@ public class ViewManager {
     public final OmniboxButtonController omniboxModeController;
     public final OmniboxButtonController omniboxServiceController;
     public final OmniboxButtonController omniboxModelController;
+
     public final WorkspaceModel workspaceModel;
 
     public ViewManager(int cols, int rows, Runnable repaintCallback, Client client) {
@@ -70,10 +73,12 @@ public class ViewManager {
 
         this.omnibox = new Omnibox(cols, rows);
 
+        this.footer = new Footer(cols, rows);
+
         this.omniboxTextController = new OmniboxTextController(this.omnibox, this.workspaceModel, client);
-        this.omniboxModeController = new OmniboxButtonController(this.omnibox.footer.mode, this.omnibox.popupMode, this.focusManager);
-        this.omniboxServiceController = new OmniboxButtonController(this.omnibox.footer.service, this.omnibox.popupService, this.focusManager);
-        this.omniboxModelController = new OmniboxButtonController(this.omnibox.footer.model, this.omnibox.popupModel, this.focusManager);
+        this.omniboxModeController = new OmniboxButtonController(this.footer.mode, this.footer.popupMode, this.focusManager);
+        this.omniboxServiceController = new OmniboxButtonController(this.footer.service, this.footer.popupService, this.focusManager);
+        this.omniboxModelController = new OmniboxButtonController(this.footer.model, this.footer.popupModel, this.focusManager);
 
         this.focusManager.registerTarget(this.filesController);
         this.focusManager.registerTarget(this.editorController);
@@ -138,13 +143,13 @@ public class ViewManager {
         this.container.add(this.editor);
         this.container.add(this.imageViewer);
         this.container.add(this.omnibox);
-        this.container.add(this.omnibox.footer);
+        this.container.add(this.footer);
         this.container.add(this.resultSearch);
         this.container.add(this.resultProgress);
 //      this.container.add(this.heatmap);
-        this.container.add(this.omnibox.popupMode);
-        this.container.add(this.omnibox.popupService);
-        this.container.add(this.omnibox.popupModel);
+        this.container.add(this.footer.popupMode);
+        this.container.add(this.footer.popupService);
+        this.container.add(this.footer.popupModel);
         this.container.add(this.editor.autocompleteMgr.getAutocompletePopup());
         this.container.add(this.dialog);
     }

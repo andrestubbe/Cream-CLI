@@ -22,12 +22,25 @@ public class Footer extends Container {
     public final Button mode;
     public final Button service;
     public final Button model;
+    public final PopupMode popupMode;
+    public final PopupService popupService;
+    public final PopupModel popupModel;
     public final TextField context;
     public final TextField cost;
     public final LinearLayout layout;
 
-    public Footer(int x, int y, int width, Runnable onMode, Runnable onService, Runnable onModel) {
-        super(x, y, width, 1);
+    public Footer(int cols, int rows) {
+        super(1, rows - 1, cols, 1);
+
+        this.popupMode = new PopupMode(cols, rows);
+        this.popupMode.setVisible(false);
+        this.popupService = new PopupService(cols, rows);
+        this.popupService.setVisible(false);
+        this.popupModel = new PopupModel(cols, rows);
+        this.popupModel.setVisible(false);
+        final Runnable onMode = () -> this.popupMode.setVisible(!this.popupMode.isVisible());
+        final Runnable onService = () -> this.popupService.setVisible(!this.popupService.isVisible());
+        final Runnable onModel = () -> this.popupModel.setVisible(!this.popupModel.isVisible());
 
         this.mode = new Button(0, 0, " Auto ↑", 1, OMNIBOX_DROPDOWN_MODE_BACKGROUND_SET, OMNIBOX_DROPDOWN_MODE_FOREGROUND_SET, onMode);
         this.service = new Button(0, 0, "Llama ↑", 1, Theme.OMNIBOX_BUTTON_BACKGROUND_SET, Theme.OMNIBOX_BUTTON_FOREGROUND_SET, onService);
@@ -56,5 +69,9 @@ public class Footer extends Container {
         setWidth(width);
         final List<Component> horizontal = List.of(this.mode, this.service, this.model, this.context, this.cost);
         this.layout.layout(0, 0, width, 1, horizontal);
+    }
+
+    public void adjustHeight(int terminalRows) {
+        this.relayout(this.y + 3, this.width);
     }
 }

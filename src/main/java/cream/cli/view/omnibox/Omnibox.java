@@ -1,10 +1,6 @@
 package cream.cli.view.omnibox;
 
 import cream.cli.Theme;
-import cream.cli.view.footer.Footer;
-import cream.cli.view.footer.PopupMode;
-import cream.cli.view.footer.PopupModel;
-import cream.cli.view.footer.PopupService;
 import fasttui.behaviour.Behaviour;
 import fasttui.component.*;
 import fasttui.composable.MultilineTextBox;
@@ -25,24 +21,10 @@ public class Omnibox extends Container implements Interactive {
     public final Box box;
     public final MultilineTextBox text;
     private final TextField symbol;
-    public final PopupMode popupMode;
-    public final PopupService popupService;
-    public final PopupModel popupModel;
-    public final Footer footer;
     private final List<Behaviour> behaviors = new ArrayList<>();
 
     public Omnibox(int cols, int rows) {
         super(1, rows - 4, cols - 2, 3);
-
-        this.popupMode = new PopupMode(cols, rows);
-        this.popupMode.setVisible(false);
-        this.popupService = new PopupService(cols, rows);
-        this.popupService.setVisible(false);
-        this.popupModel = new PopupModel(cols, rows);
-        this.popupModel.setVisible(false);
-        final Runnable runnable0 = () -> this.popupMode.setVisible(!this.popupMode.isVisible());
-        final Runnable runnable1 = () -> this.popupService.setVisible(!this.popupService.isVisible());
-        final Runnable runnable2 = () -> this.popupModel.setVisible(!this.popupModel.isVisible());
 
         this.box = new Box(0, 0, this.width, 3);
         this.box.setBorderStyle(BorderStyle.ROUNDED);
@@ -63,8 +45,6 @@ public class Omnibox extends Container implements Interactive {
         this.text.addStateChangeListener(this.getTextStateChangeListener());
 
         this.behaviors.add(new InputBehaviour(this.text));
-
-        this.footer = new Footer(1, this.y + 3, this.width, runnable0, runnable1, runnable2);
 
         this.add(this.box);
         this.add(this.symbol);
@@ -113,9 +93,6 @@ public class Omnibox extends Container implements Interactive {
             symbol.setY(this.y + 1);
             text.setY(this.y + 1);
             text.setHeight(desiredTextHeight);
-            if (footer != null) {
-                footer.relayout(this.y + 3, this.width);
-            }
         }
     }
 }
