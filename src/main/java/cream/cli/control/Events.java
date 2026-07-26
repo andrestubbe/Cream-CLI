@@ -24,9 +24,8 @@ public class Events {
     }
 
     public void initMouse() {
-        // Disabled mouse listener temporarily as requested
-        // this.mouseHandler = new MouseHandler(client, client.getContainer(), client.getNavigator(), client.getEditor(), client.getOmnibox());
-        // fastterminal.AnsiMouse.open(this.mouseHandler);
+        this.mouseHandler = new MouseHandler(client, client.getContainer(), client.getNavigator(), client.getEditor(), client.getOmnibox());
+        fastterminal.AnsiMouse.open(this.mouseHandler);
     }
 
     private void initKeyboard() {

@@ -206,23 +206,7 @@ public class MouseHandler implements FastMouseListener {
                 newTarget = client.getViewManager().filesController;
             } else if (editor != null && editor.isVisible() && mouseCell[0] >= editor.getX() && mouseCell[0] < editor.getX() + editor.getWidth() && mouseCell[1] >= editor.getY() && mouseCell[1] < editor.getY() + editor.getHeight()) {
                 newTarget = client.getViewManager().editorController;
-            } else if (omnibox != null && mouseCell[1] >= omnibox.getY() + omnibox.mode.getY() && mouseCell[1] <= omnibox.getY() + omnibox.getHeight()) {
-                if (mouseCell[0] >= omnibox.getX() + omnibox.mode.getX() && mouseCell[0] < omnibox.getX() + omnibox.mode.getX() + omnibox.mode.getWidth()) {
-                    newTarget = client.getViewManager().omniboxModeController;
-                    omnibox.popupMode.setVisible(!omnibox.popupMode.isVisible());
-                    if (omnibox.popupMode.isVisible()) fm.setCurrentComponent(omnibox.popupMode);
-                } else if (mouseCell[0] >= omnibox.getX() + omnibox.service.getX() && mouseCell[0] < omnibox.getX() + omnibox.service.getX() + omnibox.service.getWidth()) {
-                    newTarget = client.getViewManager().omniboxServiceController;
-                    omnibox.popupService.setVisible(!omnibox.popupService.isVisible());
-                    if (omnibox.popupService.isVisible()) fm.setCurrentComponent(omnibox.popupService);
-                } else if (mouseCell[0] >= omnibox.getX() + omnibox.model.getX() && mouseCell[0] < omnibox.getX() + omnibox.model.getX() + omnibox.model.getWidth()) {
-                    newTarget = client.getViewManager().omniboxModelController;
-                    omnibox.popupModel.setVisible(!omnibox.popupModel.isVisible());
-                    if (omnibox.popupModel.isVisible()) fm.setCurrentComponent(omnibox.popupModel);
-                } else {
-                    newTarget = client.getViewManager().omniboxTextController;
-                }
-            } else if (omnibox != null && hit == omnibox.text) {
+            } else if (omnibox != null && (hit == omnibox.text || (mouseCell[0] >= omnibox.getX() && mouseCell[0] < omnibox.getX() + omnibox.getWidth() && mouseCell[1] >= omnibox.getY() && mouseCell[1] < omnibox.getY() + omnibox.getHeight()))) {
                 newTarget = client.getViewManager().omniboxTextController;
             }
 
