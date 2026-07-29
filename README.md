@@ -6,6 +6,7 @@
 
 ![Cream CLI Preview](docs/screenshot.png)
 ![Cream CLI Preview](docs/screenshot2.png)
+![Cream CLI Preview](docs/screenshot3.png)
 
 
 ## Inspiration
