@@ -1,8 +1,8 @@
 package cream.cli.view.ui;
 
-import cream.cli.Theme;
-import cream.cli.control.FocusManager;
-import cream.cli.control.FocusTarget;
+import cream.cli.control.focus.FocusManager;
+import cream.cli.control.focus.FocusTarget;
+import cream.cli.view.theme.ThemeService;
 import fastkeyboard.Keys;
 import fastterminal.FastTerminalScene;
 import fasttui.behaviour.ButtonState;
@@ -18,13 +18,7 @@ import java.util.List;
 
 public abstract class Popup extends Container implements FocusTarget, FocusManager.FallbackFocusTarget {
 
-    public static final BorderStyle POPUP_BORDER_STYLE = Theme.POPUP_BORDER_STYLE;
-    public static final int TRANSPARENT = Theme.TRANSPARENT;
-    public static final int POPUP_BORDER = Theme.POPUP_BORDER;
-    public static final int POPUP_BACKGROUND_NORMAL = Theme.POPUP_BACKGROUND_NORMAL;
-    public static final int POPUP_FOREGROUND_SELECTION = Theme.POPUP_FOREGROUND_SELECTION;
-    public static final ColorSet SCROLLBAR_FOREGROUND_SET = Theme.SCROLLBAR_FOREGROUND_SET;
-    public static final ColorSet SCROLLBAR_BACKGROUND_SET = Theme.SCROLLBAR_BACKGROUND_SET;
+    private static final BorderStyle POPUP_BORDER_STYLE = BorderStyle.ROUNDED;
 
     protected final Box box;
     protected final ScrollVertical scrollbar;
@@ -37,45 +31,34 @@ public abstract class Popup extends Container implements FocusTarget, FocusManag
     protected FocusTarget parentTarget;
     protected FocusManager focusManager;
 
-    public void setFocusManager(FocusManager focusManager) {
-        this.focusManager = focusManager;
-    }
-
-    public void setParentTarget(FocusTarget parentTarget) {
-        this.parentTarget = parentTarget;
-    }
-
-    @Override
-    public FocusTarget getParentTarget() {
-        return parentTarget;
-    }
-
     public Popup(int x, int y, int width, int height) {
         super(x, y, width, height);
 
         this.box = new Box(0, 0, width, height);
-//        this.box.setBackgroundColor(TRANSPARENT);
-        this.box.setBackgroundColor(POPUP_BACKGROUND_NORMAL);
-        this.box.setBorderColor(POPUP_BORDER);
+        this.box.setBackgroundColor(ThemeService.get().getPopupBackgroundNormal());
+        this.box.setBorderColor(ThemeService.get().getPopupForegroundBorder());
         this.box.setBorderStyle(POPUP_BORDER_STYLE);
         this.add(this.box);
 
-        final int px = width - 1;
-        final int py = 1;
-        final int pHeight = Math.max(1, height - 2);
-        this.scrollbar = new ScrollVertical(px, py, pHeight, SCROLLBAR_FOREGROUND_SET, SCROLLBAR_BACKGROUND_SET);
+        final int scrollbarX = width - 1;
+        final int scrollbarY = 1;
+        final int scrollbarHeight = Math.max(1, height - 2);
+        int transparent = -2;
+        ColorSet scrollFg = new ColorSet(ThemeService.get().getScrollbarForegroundNormal(), ThemeService.get().getScrollbarForegroundHover(), ThemeService.get().getScrollbarForegroundNormal(), ThemeService.get().getScrollbarForegroundNormal());
+        ColorSet scrollBg = new ColorSet(transparent, ThemeService.get().getScrollbarBackgroundHover(), transparent, transparent);
+        this.scrollbar = new ScrollVertical(scrollbarX, scrollbarY, scrollbarHeight, scrollFg, scrollBg);
     }
 
     @Override
     public void render(FastTerminalScene scene) {
         if (!isVisible()) return;
 
-        box.setX(this.x);
-        box.setY(this.y);
+        box.setX(0);
+        box.setY(0);
         box.setWidth(this.width);
         box.setHeight(this.height);
 
-        TerminalGraphics.applyStenciledBlurredShadow(scene, this.x, this.y, this.width, this.height, 0, 1, 0x000000, 0.33, 2.5, 1.0);
+        TerminalGraphics.applyStenciledBlurredShadow(scene, getAbsoluteX(), getAbsoluteY(), this.width, this.height, 0, 1, 0x000000, 0.33, 2.5, 1.0);
 //        TerminalGraphics.applyBackgroundBlur(scene, this.x, this.y, this.width, this.height, 1.0, 2.0, 0.8);
 //        TerminalGraphics.applyOverlay(scene, this.x, this.y, this.width, this.height, POPUP_BACKGROUND_NORMAL, 0.90);
 
@@ -83,8 +66,8 @@ public abstract class Popup extends Container implements FocusTarget, FocusManag
 
         int innerH = Math.max(1, this.height - 2);
         if (this.rows.size() > innerH) {
-            this.scrollbar.setX(this.x + this.width - 2);
-            this.scrollbar.setY(this.y + 1);
+            this.scrollbar.setX(this.width - 2);
+            this.scrollbar.setY(1);
             this.scrollbar.setHeight(innerH);
             this.scrollbar.update(this.rows.size(), innerH, scrollOffset);
             this.scrollbar.render(scene);
@@ -135,8 +118,8 @@ public abstract class Popup extends Container implements FocusTarget, FocusManag
             boolean isVisibleRow = (i >= scrollOffset && i < scrollOffset + innerH);
             r.setVisible(isVisibleRow);
             if (isVisibleRow) {
-                r.setX(this.x + 1);
-                r.setY(this.y + 1 + (i - scrollOffset));
+                r.setX(1);
+                r.setY(1 + (i - scrollOffset));
             }
             r.onStateChanged(isSel ? ButtonState.HOVERED : ButtonState.NORMAL);
         }
@@ -145,6 +128,7 @@ public abstract class Popup extends Container implements FocusTarget, FocusManag
     public void addRow(Row row) {
         this.rows.add(row);
         if (!this.children.contains(row)) {
+            row.setParent(this);
             this.children.add(row);
         }
         updateScrollAndSelection();
@@ -207,7 +191,8 @@ public abstract class Popup extends Container implements FocusTarget, FocusManag
     public boolean handleMouseClick(int mouseX, int mouseY, boolean isPressed) {
         if (!isVisible() || !isPressed) return false;
         if (containsPoint(mouseX, mouseY)) {
-            int relY = mouseY - (y + 1);
+            int absY = getAbsoluteY();
+            int relY = mouseY - (absY + 1);
             int clickedIdx = scrollOffset + relY;
             if (clickedIdx >= 0 && clickedIdx < rows.size()) {
                 setSelectedIndex(clickedIdx);
@@ -228,12 +213,15 @@ public abstract class Popup extends Container implements FocusTarget, FocusManag
     }
 
     public boolean containsPoint(int mouseX, int mouseY) {
-        return isVisible() && mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height;
+        int absX = getAbsoluteX();
+        int absY = getAbsoluteY();
+        return isVisible() && mouseX >= absX && mouseX < absX + width && mouseY >= absY && mouseY < absY + height;
     }
 
     public int getItemIndexAt(int mouseX, int mouseY) {
         if (!containsPoint(mouseX, mouseY)) return -1;
-        int relY = mouseY - (y + 1);
+        int absY = getAbsoluteY();
+        int relY = mouseY - (absY + 1);
         int itemIdx = scrollOffset + relY;
         if (itemIdx >= 0 && itemIdx < rows.size()) {
             return itemIdx;
@@ -247,33 +235,59 @@ public abstract class Popup extends Container implements FocusTarget, FocusManag
     }
 
     public int getSelectedIndex() {
-        return selectedIndex;
+        return this.selectedIndex;
     }
 
-    public void setOnSelectAction(Runnable action) {
+    public String getLabelAt(int index) {
+        if (index >= 0 && index < rows.size()) {
+            Row r = rows.get(index);
+            if (r != null && r.getCells() != null && !r.getCells().isEmpty()) {
+                if (r.getCells().size() > 1) {
+                    return r.getCells().get(1).text;
+                }
+                return r.getCells().get(0).text;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public FocusTarget getParentTarget() {
+        return this.parentTarget;
+    }
+
+    public void setFocusManager(final FocusManager focusManager) {
+        this.focusManager = focusManager;
+    }
+
+    public void setParentTarget(final FocusTarget parentTarget) {
+        this.parentTarget = parentTarget;
+    }
+
+    public void setOnSelectAction(final Runnable action) {
         this.onSelectAction = action;
     }
 
     @Override
-    public void setX(int newX) {
+    public void setX(final int newX) {
         super.setX(newX);
-        updateScrollAndSelection();
+        this.updateScrollAndSelection();
     }
 
     @Override
-    public void setY(int newY) {
+    public void setY(final int newY) {
         super.setY(newY);
-        updateScrollAndSelection();
+        this.updateScrollAndSelection();
     }
 
-    public void setSelectedIndex(int index) {
+    public void setSelectedIndex(final int index) {
         if (index >= 0 && index < rows.size()) {
             this.selectedIndex = index;
-            updateScrollAndSelection();
+            this.updateScrollAndSelection();
         }
     }
 
-    public void setHoveredIndex(int index) {
+    public void setHoveredIndex(final int index) {
         if (index >= 0 && index < rows.size()) {
             this.selectedIndex = index;
             int innerH = Math.max(1, this.height - 2);

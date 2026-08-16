@@ -1,6 +1,6 @@
 package cream.cli.view.editor.syntax;
 
-import cream.cli.Theme;
+import cream.cli.view.theme.ThemeService;
 import fastterminal.FastStyle;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,14 +26,37 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
         int[] fg = new int[len];
         byte[] styles = new byte[len];
         this.lastStyles = styles;
-        Arrays.fill(fg, Theme.SYNTAX_DEFAULT);
+        Arrays.fill(fg, ThemeService.get().getSyntaxDefault());
 
         String trimmed = text.trim();
 
         // 1. Javadoc / Multiline comment continuation lines (starting with /*, /**, *, */)
         if (trimmed.startsWith("/*") || trimmed.startsWith("/**") || trimmed.startsWith("*") || trimmed.startsWith("*/")) {
-            Arrays.fill(fg, 0, len, Theme.SYNTAX_COMMENT);
+            Arrays.fill(fg, 0, len, ThemeService.get().getSyntaxComment());
             return fg;
+        }
+
+        // 2. package & import statement line coloring
+        if (trimmed.startsWith("package ") || trimmed.startsWith("import ")) {
+            int keywordLen = trimmed.startsWith("package ") ? 7 : 6;
+            int startIdx = text.indexOf(trimmed.startsWith("package ") ? "package" : "import");
+            if (startIdx >= 0) {
+                Arrays.fill(fg, startIdx, startIdx + keywordLen, ThemeService.get().getSyntaxKeyword());
+                int contentStart = startIdx + keywordLen;
+                int contentEnd = text.indexOf(';', contentStart);
+                if (contentEnd < 0) contentEnd = len;
+                Arrays.fill(fg, contentStart, contentEnd, ThemeService.get().getSyntaxParameter());
+                for (int k = contentStart; k < contentEnd; k++) {
+                    char ch = text.charAt(k);
+                    if (ch == ';' || ch == '.') {
+                        fg[k] = ThemeService.get().getSyntaxPunctuation();
+                    }
+                }
+                if (contentEnd < len && text.charAt(contentEnd) == ';') {
+                    fg[contentEnd] = ThemeService.get().getSyntaxPunctuation();
+                }
+                return fg;
+            }
         }
 
         boolean wasType = false;
@@ -55,13 +78,13 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                     }
                     i++;
                 }
-                Arrays.fill(fg, start, Math.min(i, len), Theme.SYNTAX_COMMENT);
+                Arrays.fill(fg, start, Math.min(i, len), ThemeService.get().getSyntaxComment());
                 continue;
             }
 
             // Single line comment //
             if (c == '/' && i + 1 < len && text.charAt(i + 1) == '/') {
-                Arrays.fill(fg, i, len, Theme.SYNTAX_COMMENT);
+                Arrays.fill(fg, i, len, ThemeService.get().getSyntaxComment());
                 break;
             }
 
@@ -81,7 +104,7 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                 if (!closedOnSameLine) {
                     inBlockComment = true;
                 }
-                Arrays.fill(fg, start, Math.min(i, len), Theme.SYNTAX_COMMENT);
+                Arrays.fill(fg, start, Math.min(i, len), ThemeService.get().getSyntaxComment());
                 continue;
             }
 
@@ -92,7 +115,7 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                 while (i < len && Character.isJavaIdentifierPart(text.charAt(i))) {
                     i++;
                 }
-                Arrays.fill(fg, start, i, Theme.SYNTAX_KEYWORD);
+                Arrays.fill(fg, start, i, ThemeService.get().getSyntaxKeyword());
                 wasType = false;
                 continue;
             }
@@ -105,7 +128,7 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                     else i++;
                 }
                 if (i < len) i++;
-                Arrays.fill(fg, start, Math.min(i, len), Theme.SYNTAX_STRING);
+                Arrays.fill(fg, start, Math.min(i, len), ThemeService.get().getSyntaxString());
                 wasType = false;
                 continue;
             }
@@ -118,7 +141,7 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                     else i++;
                 }
                 if (i < len) i++;
-                Arrays.fill(fg, start, Math.min(i, len), Theme.SYNTAX_STRING);
+                Arrays.fill(fg, start, Math.min(i, len), ThemeService.get().getSyntaxString());
                 wasType = false;
                 continue;
             }
@@ -134,7 +157,7 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                         i++;
                     } else break;
                 }
-                Arrays.fill(fg, start, i, Theme.SYNTAX_NUMBER);
+                Arrays.fill(fg, start, i, ThemeService.get().getSyntaxNumber());
                 wasType = false;
                 continue;
             }
@@ -150,51 +173,71 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                 boolean isMethodCall = (nextIdx < len && text.charAt(nextIdx) == '(') || (start >= 2 && text.substring(start - 2, start).equals("::"));
                 boolean isThisAccess = (start >= 5 && text.substring(start - 5, start).equals("this.")) || (start >= 6 && text.substring(start - 6, start).equals("super."));
 
-                int color = Theme.SYNTAX_IDENTIFIER;
+                int color = ThemeService.get().getSyntaxIdentifier();
                 byte style = FastStyle.NONE;
 
+                int prevIdx = start - 1;
+                while (prevIdx >= 0 && Character.isWhitespace(text.charAt(prevIdx))) prevIdx--;
+                boolean isAfterNew = (prevIdx >= 2 && text.substring(prevIdx - 2, prevIdx + 1).equals("new"));
+
+                boolean isStaticAccess = false;
+                if (start >= 2 && text.charAt(start - 1) == '.') {
+                    int p = start - 2;
+                    while (p >= 0 && Character.isJavaIdentifierPart(text.charAt(p))) p--;
+                    String target = text.substring(p + 1, start - 1);
+                    if (!target.isEmpty() && Character.isUpperCase(target.charAt(0))) {
+                        isStaticAccess = true;
+                    }
+                }
+
                 if (word.equals("this") || word.equals("super")) {
-                    color = Theme.SYNTAX_THIS;
+                    color = ThemeService.get().getSyntaxThis();
                     style = FastStyle.ITALIC;
                     wasType = false;
                 } else if (isKeyword(word)) {
-                    color = Theme.SYNTAX_KEYWORD;
+                    color = ThemeService.get().getSyntaxKeyword();
                     wasType = isPrimitiveTypeKeyword(word);
                     if (isVisibilityKeyword(word)) wasVisibility = true;
                 } else if (isThisAccess) {
-                    color = Theme.SYNTAX_FIELD;
+                    color = ThemeService.get().getSyntaxField();
                     activeFields.add(word);
                     wasType = false;
                 } else if (isConstantName(word)) {
-                    color = Theme.SYNTAX_CONSTANT;
+                    color = ThemeService.get().getSyntaxConstant();
                     style = FastStyle.ITALIC;
                     wasType = false;
+                } else if (isAfterNew) {
+                    color = ThemeService.get().getSyntaxMethod();
+                    wasType = false;
+                } else if (isMethodCall && isStaticAccess && !isControlFlowKeyword(word)) {
+                    color = ThemeService.get().getSyntaxIdentifier();
+                    wasType = false;
                 } else if (isMethodCall && !isControlFlowKeyword(word)) {
-                    color = Theme.SYNTAX_METHOD;
+                    color = ThemeService.get().getSyntaxMethod();
                     wasType = false;
                 } else if (isType(word)) {
-                    color = Theme.SYNTAX_TYPE;
+                    color = ThemeService.get().getSyntaxType();
                     wasType = true;
                 } else if (wasType) {
                     if (parenDepth > 0) {
-                        color = Theme.SYNTAX_PARAMETER;
+                        color = ThemeService.get().getSyntaxParameter();
                         activeParams.add(word);
                     } else if (braceDepth <= 1 || wasVisibility) {
-                        color = Theme.SYNTAX_FIELD;
+                        color = ThemeService.get().getSyntaxField();
                         activeFields.add(word);
                     } else {
-                        color = Theme.SYNTAX_LOCAL_VARIABLE;
+                        color = ThemeService.get().getSyntaxLocalVariable();
                         activeVars.add(word);
                     }
                     wasType = false;
                 } else if (activeParams.contains(word)) {
-                    color = Theme.SYNTAX_PARAMETER;
+                    color = ThemeService.get().getSyntaxParameter();
                     wasType = false;
                 } else if (activeVars.contains(word)) {
-                    color = Theme.SYNTAX_LOCAL_VARIABLE;
+                    color = ThemeService.get().getSyntaxLocalVariable();
                     wasType = false;
                 } else if (activeFields.contains(word)) {
-                    color = Theme.SYNTAX_FIELD;
+                    color = ThemeService.get().getSyntaxField();
                     wasType = false;
                 } else {
                     wasType = false;
@@ -210,12 +253,12 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
             // Operators / punctuation / braces / parens
             switch (c) {
                 case '{' -> {
-                    fg[i] = Theme.SYNTAX_BRACE;
+                    fg[i] = ThemeService.get().getSyntaxBrace();
                     braceDepth++;
                     wasType = false;
                 }
                 case '}' -> {
-                    fg[i] = Theme.SYNTAX_BRACE;
+                    fg[i] = ThemeService.get().getSyntaxBrace();
                     if (braceDepth > 0) braceDepth--;
                     if (braceDepth <= 1) {
                         // Scope closed: clear method parameters & local variables
@@ -225,29 +268,29 @@ public class JavaSyntaxHighlighter implements SyntaxHighlighter {
                     wasType = false;
                 }
                 case '(' -> {
-                    fg[i] = Theme.SYNTAX_PAREN;
+                    fg[i] = ThemeService.get().getSyntaxParen();
                     parenDepth++;
                 }
                 case ')' -> {
-                    fg[i] = Theme.SYNTAX_PAREN;
+                    fg[i] = ThemeService.get().getSyntaxParen();
                     if (parenDepth > 0) parenDepth--;
                     wasType = false;
                 }
                 case '[', ']' -> {
-                    fg[i] = Theme.SYNTAX_PAREN;
+                    fg[i] = ThemeService.get().getSyntaxParen();
                     // Intentionally keep wasType active for array declarations like String[] a
                 }
                 case ';', ',', '.' -> {
-                    fg[i] = Theme.SYNTAX_PUNCTUATION;
+                    fg[i] = ThemeService.get().getSyntaxPunctuation();
                     if (c == ';') wasType = false;
                 }
                 case '+', '-', '*', '/', '%', '=', '!', '<', '>', '&', '|', '^', '?', ':', '~' -> {
-                    fg[i] = Theme.SYNTAX_OPERATOR;
+                    fg[i] = ThemeService.get().getSyntaxOperator();
                     if (c == '=') wasType = false;
                 }
                 default -> {
                     if (!Character.isWhitespace(c)) {
-                        fg[i] = Theme.SYNTAX_PUNCTUATION;
+                        fg[i] = ThemeService.get().getSyntaxPunctuation();
                         wasType = false;
                     }
                 }

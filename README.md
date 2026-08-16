@@ -5,6 +5,7 @@
 > A next-generation command-line environment — built on the [FastJava](https://github.com/andrestubbe/FastJava) ecosystem.
 
 ![Cream CLI Preview](docs/screenshot.png)
+![Cream CLI Preview](docs/screenshot2.png)
 
 ## Inspiration
 
@@ -27,7 +28,7 @@ Instead of treating the terminal as a text-only interface, Cream turns every com
 
 ### Core Ideas
 
-- **No black box.** Every AI action is visible while it happens.
+- **No black borderPanel.** Every AI action is visible while it happens.
 - **Terminal + Explorer become one.** Files are both commands and visual objects.
 - **AI works transparently.** You can watch every file being opened, every edit, every command, and every decision.
 - **Everything stays interactive.** Nothing disappears behind hidden background processes.
@@ -102,7 +103,7 @@ Cream CLI is assembled from the following FastJava libraries:
 | Library | Role |
 |---|---|
 | [FastTerminal](https://github.com/andrestubbe/FastTerminal) | Native terminal rendering engine |
-| [FastTUI](https://github.com/andrestubbe/FastTUI) | Retained-mode UI component framework |
+| [FastTUI](https://github.com/andrestubbe/FastTUI) | Retained-mode UI eventBehaviour framework |
 | [FastANSI](https://github.com/andrestubbe/FastANSI) | ANSI escape code utilities |
 | [FastASCII](https://github.com/andrestubbe/FastASCII) | ASCII art and font rendering |
 | [FastEmojis](https://github.com/andrestubbe/FastEmojis) | Emoji width and rendering support |

@@ -1,173 +1,76 @@
 package cream.cli.view.files;
 
-import fastterminal.FastTerminalScene;
-import fasttui.component.Control;
+import cream.cli.view.theme.ThemeService;
+import fasttui.component.ColorSet;
+import fasttui.component.Container;
 import fasttui.composable.ScrollVertical;
 
-import java.io.File;
-import java.util.function.Consumer;
+public class Files extends Container {
 
-public class Files extends Control {
+    private static final int transparent = -2;
+    private static final ColorSet scrollFg = new ColorSet(
+            ThemeService.get().getScrollbarForegroundNormal(),
+            ThemeService.get().getScrollbarForegroundHover(),
+            ThemeService.get().getScrollbarForegroundNormal(),
+            ThemeService.get().getScrollbarForegroundNormal());
+    private static final ColorSet scrollBg = new ColorSet(
+            transparent,
+            ThemeService.get().getScrollbarBackgroundHover(),
+            transparent,
+            transparent);
 
-    private final FilesState state;
-    private final FilesDirectoryLoader loader;
-    private final FilesSelection selection;
-    private final FilesNavigation navigation;
-    private final FilesRenderer renderer;
+    private final FilesHeader filesHeader;
+    private final FilesList filesList;
+    private final FilesFooter filesFooter;
+    private final ScrollVertical filesListScroll;
 
-    private final Runnable repaintTrigger;
-    private ScrollVertical scrollBar;
-
-    public Files(int x, int y, int width, int height, Runnable repaintTrigger) {
+    public Files(final int x, final int y, final int width, final int height, final Runnable repaintTrigger) {
         super(x, y, width, height);
-        this.repaintTrigger = repaintTrigger;
-        this.state = new FilesState();
-        this.loader = new FilesDirectoryLoader();
-        this.selection = new FilesSelection(state);
-        this.navigation = new FilesNavigation(state, loader, repaintTrigger);
-        this.renderer = new FilesRenderer(state);
-        this.loader.load(state, repaintTrigger);
-        this.addBehavior(new FilesBehaviour(this));
+        int filesListHeight = this.height - 2;
+        this.filesHeader = new FilesHeader(0, 0, this.width, 1);
+        this.filesListScroll = new ScrollVertical(this.width - 1, 1, filesListHeight, scrollFg, scrollBg);
+        this.filesList = new FilesList(0, 1, this.width - 1, filesListHeight, repaintTrigger);
+        this.filesList.setScrollBar(this.filesListScroll);
+        this.filesFooter = new FilesFooter(0, this.height - 1, this.width, 1, this.filesList.getFilesState());
+        this.add(this.filesHeader);
+        this.add(this.filesList);
+        this.add(this.filesListScroll);
+        this.add(this.filesFooter);
     }
 
-    @Override
-    public void render(FastTerminalScene scene) {
-        if (!visible) return;
-        this.syncScrollBar();
-
-        // 1. Draw container background first
-        if (backgroundColor != -1) {
-            for (int r = 0; r < height; r++) {
-                for (int c = 0; c < width; c++) {
-                    scene.writeCell(x + c, y + r, ' ', -1, backgroundColor);
-                }
-            }
+    public void onResize() {
+        final int w = getWidth();
+        final int h = getHeight();
+        if (this.filesHeader != null) {
+            this.filesHeader.setWidth(w);
         }
-
-        // 2. Render files list
-        this.renderer.render(scene, this.x, this.y, this.width, this.height, this.backgroundColor, this.foregroundColor);
-
-        // 3. Render child components on top
-        for (fasttui.component.Component child : children) {
-            if (child.isVisible()) {
-                child.render(scene);
-            }
+        if (this.filesList != null) {
+            this.filesList.setWidth(w - 1);
+            this.filesList.setHeight(h - 2);
         }
-    }
-
-    public void refreshFiles() {
-        loader.load(state);
-    }
-
-    public void toggleShowHidden() {
-        state.showHidden = !state.showHidden;
-        refreshFiles();
-    }
-
-    public void scroll(int delta) {
-        selection.scroll(delta, height);
-        syncScrollBar();
-    }
-
-    public void selectPrevious() {
-        selectPrevious(false);
-    }
-
-    public void selectPrevious(boolean shift) {
-        selection.previous(height, shift);
-        syncScrollBar();
-    }
-
-    public void selectNext() {
-        selectNext(false);
-    }
-
-    public void selectNext(boolean shift) {
-        selection.next(height, shift);
-        syncScrollBar();
-    }
-
-    public boolean activateSelected() {
-        return navigation.openSelected();
-    }
-
-    public void navigateUp() {
-        navigation.up();
-    }
-
-    public void hoverFile(String name) {
-        selection.hover(name, height);
-    }
-
-    public void hoverFilePath(String path) {
-        selection.hoverPath(path, height);
-    }
-
-    public void setFileOpenListener(FileOpenListener listener) {
-        navigation.setFileOpenListener(listener);
-    }
-
-    public void setDirectoryChangeListener(Consumer<File> listener) {
-        navigation.setDirectoryChangeListener(listener);
-    }
-
-    public void navigateTo(File dir) {
-        if (dir == null || !dir.isDirectory()) return;
-        state.currentDirectory = dir;
-        loader.load(state, repaintTrigger);
-    }
-
-    public void setScrollBar(ScrollVertical scrollBar) {
-        this.scrollBar = scrollBar;
-        if (this.scrollBar != null) {
-            this.scrollBar.setScrollListener(offset -> {
-                state.scrollOffset = offset;
-                this.syncScrollBar();
-                if (repaintTrigger != null) {
-                    repaintTrigger.run();
-                }
-            });
+        if (this.filesListScroll != null) {
+            this.filesListScroll.setX(getX() + w - 1);
+            this.filesListScroll.setHeight(h - 2);
+        }
+        if (this.filesFooter != null) {
+            this.filesFooter.setY(getY() + h - 1);
+            this.filesFooter.setWidth(w);
+        }
+        if (this.filesList != null) {
+            this.filesList.syncScrollBar();
         }
     }
 
-    public void setCurrentDirectory(String path) {
-        navigation.setDirectory(path);
+    public FilesHeader getFilesHeader() {
+        return this.filesHeader;
     }
 
-    public void setCurrentDirectorySync(String path) {
-        navigation.setDirectorySync(path);
+    public FilesList getFilesList() {
+        return this.filesList;
     }
 
-    public void syncScrollBar() {
-        if (scrollBar == null) {
-            return;
-        }
-
-        final int visible = height;
-        final boolean needed = state.files.size() > visible;
-
-        scrollBar.setVisible(needed);
-
-        if (needed) {
-            scrollBar.update(state.files.size(), visible, state.scrollOffset);
-        }
+    public FilesFooter getFilesFooter() {
+        return this.filesFooter;
     }
 
-    public int getScrollOffset() {
-        return state.scrollOffset;
-    }
-
-    public int getFileCount() {
-        return state.files.size();
-    }
-
-    public void select(int index) {
-        if (index >= 0 && index < state.files.size()) {
-            state.selectedIndex = index;
-        }
-    }
-
-    public FilesState getState() {
-        return state;
-    }
 }

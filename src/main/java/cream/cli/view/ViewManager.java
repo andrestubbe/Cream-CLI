@@ -1,131 +1,98 @@
 package cream.cli.view;
 
 import cream.cli.Client;
-import cream.cli.Theme;
-import cream.cli.control.EditorController;
-import cream.cli.control.FilesController;
-import cream.cli.control.FocusManager;
-import cream.cli.control.ImageViewController;
-import cream.cli.control.OmniboxButtonController;
-import cream.cli.control.OmniboxTextController;
-import cream.cli.model.FileCategory;
+import cream.cli.control.handler.*;
+import cream.cli.control.focus.FocusManager;
 import cream.cli.model.WorkspaceModel;
+import cream.cli.model.WorkspaceModel.WorkspaceListener;
 import cream.cli.view.editor.Editor;
-import cream.cli.view.editor.ImageViewer;
-import cream.cli.view.files.Navigator;
+import cream.cli.view.editor.EditorFileManager;
 import cream.cli.view.footer.Footer;
-import cream.cli.view.header.PathHeader;
+import cream.cli.view.header.Header;
+import cream.cli.view.files.Files;
 import cream.cli.view.omnibox.Omnibox;
-import cream.cli.view.result.Heatmap;
+import cream.cli.view.result.ResultError;
 import cream.cli.view.result.ResultProgress;
 import cream.cli.view.result.ResultSearch;
-import cream.cli.view.ui.Dialog;
+import cream.cli.view.theme.ThemeService;
+import cream.cli.view.ui.Bubble;
+import cream.cli.view.ui.EditorDialog;
+import cream.cli.view.viewer.ImageViewer;
 import fasttui.component.Container;
+
 import java.io.File;
+import java.nio.file.Path;
 
 public class ViewManager {
 
+    public final FocusManager focusManager;
+    public final WorkspaceModel workspaceModel;
     public final Container container;
-    public final Navigator navigator;
-    public final PathHeader pathHeader;
+    public final Files files;
+    public final Header header;
     public final Editor editor;
+    public final EditorDialog editorDialog;
     public final ImageViewer imageViewer;
-    public final Dialog dialog;
-    public final ResultSearch resultSearch;
-    public final ResultProgress resultProgress;
-    public final Heatmap heatmap;
     public final Omnibox omnibox;
     public final Footer footer;
-
-    public final FocusManager focusManager = new FocusManager();
+    public final ResultSearch resultSearch;
+    public final ResultProgress resultProgress;
+    public final ResultError resultError;
+    public final Bubble bubble;
+    public final Bubble userBubble;
     public final FilesController filesController;
     public final EditorController editorController;
     public final ImageViewController imageViewController;
     public final OmniboxTextController omniboxTextController;
-    public final OmniboxButtonController omniboxModeController;
-    public final OmniboxButtonController omniboxServiceController;
-    public final OmniboxButtonController omniboxModelController;
-
-    public final WorkspaceModel workspaceModel;
+    public final FooterButtonController footerModeController;
+    public final FooterButtonController footerServiceController;
+    public final FooterButtonController footerModelController;
+    public final FooterButtonController footerTasksController;
 
     public ViewManager(int cols, int rows, Runnable repaintCallback, Client client) {
-        this.container = new Container(0, 0, cols, rows);
-        this.container.setBackgroundColor(Theme.BACKGROUND);
 
         this.workspaceModel = new WorkspaceModel();
+        this.focusManager = new FocusManager();
 
-        this.navigator = new Navigator(cols, rows, repaintCallback);
-        this.navigator.files.getState().focusManager = this.focusManager;
-        this.navigator.files.getState().workspaceModel = this.workspaceModel;
-        this.pathHeader = new PathHeader(0, 0, cols, this.navigator.files.getState());
-        this.filesController = new FilesController(this.navigator.files, client);
-
-        this.editor = new Editor(cols, rows - 1);
-        this.editor.setX(0);
-        this.editor.setY(1);
-        this.editor.setVisible(false);
-        this.editor.setRepaintTrigger(repaintCallback);
-        this.editorController = new EditorController(this.editor, client);
-
+        this.files = new Files(0, 1, cols, rows - 5, repaintCallback);
+        this.files.getFilesList().getFilesState().focusManager = this.focusManager;
+        this.files.getFilesList().getFilesState().workspaceModel = this.workspaceModel;
+        this.header = new Header(0, 0, cols, 1, this.files.getFilesList().getFilesState());
+        this.editor = new Editor(0, 1, cols, rows - 5, repaintCallback);
+        this.editorDialog = new EditorDialog(cols, rows);
         this.imageViewer = new ImageViewer(0, 1, cols - 1, rows - 4);
-        this.imageViewer.setVisible(false);
-        this.imageViewController = new ImageViewController(this.imageViewer, client);
-
-        this.omnibox = new Omnibox(cols, rows);
-
+        this.omnibox = new Omnibox(1, rows - 4, cols - 2, 3);
+        this.resultSearch = new ResultSearch(1, rows - 8, cols - 2, 5, rows);
+        this.resultProgress = new ResultProgress(cols, rows);
+        this.resultError = new ResultError(1, rows, cols - 2, repaintCallback);
+        this.bubble = new Bubble(1, rows - 9, cols - 2);
+        this.userBubble = new Bubble(1, rows - 14, cols - 2);
         this.footer = new Footer(cols, rows);
 
-        this.omniboxTextController = new OmniboxTextController(this.omnibox, this.workspaceModel, client);
-        this.omniboxModeController = new OmniboxButtonController(this.footer.mode, this.footer.popupMode, this.focusManager);
-        this.omniboxServiceController = new OmniboxButtonController(this.footer.service, this.footer.popupService, this.focusManager);
-        this.omniboxModelController = new OmniboxButtonController(this.footer.model, this.footer.popupModel, this.focusManager);
+        this.filesController = new FilesController(this.files.getFilesList(), client);
+        this.editorController = new EditorController(client, this.editor);
+        this.imageViewController = new ImageViewController(this.imageViewer, client);
+        this.omniboxTextController = new OmniboxTextController(client, this);
+        this.footerModeController = new FooterButtonController(this.footer.mode, this.footer.popupMode, this.focusManager);
+        this.footerServiceController = new FooterButtonController(this.footer.service, this.footer.popupService, this.focusManager);
+        this.footerModelController = new FooterButtonController(this.footer.model, this.footer.popupModel, this.focusManager);
+        this.footerTasksController = new FooterButtonController(this.footer.tasks, this.footer.popupTasks, this.focusManager);
 
         this.focusManager.registerTarget(this.filesController);
         this.focusManager.registerTarget(this.editorController);
-        this.focusManager.registerTarget(this.imageViewController);
         this.focusManager.registerTarget(this.omniboxTextController);
-        this.focusManager.registerTarget(this.omniboxModeController);
-        this.focusManager.registerTarget(this.omniboxServiceController);
-        this.focusManager.registerTarget(this.omniboxModelController);
+        this.focusManager.registerTarget(this.footerModeController);
+        this.focusManager.registerTarget(this.footerServiceController);
+        this.focusManager.registerTarget(this.footerModelController);
+        this.focusManager.registerTarget(this.footerTasksController);
         this.focusManager.setCurrentComponent(this.filesController);
 
-        this.dialog = new Dialog(cols, rows);
+        this.workspaceModel.addListener(new MyWorkspaceListener(repaintCallback));
 
-        // Milestone 85: Console-to-Visual State Synchronizer via WorkspaceModel
-        this.workspaceModel.addListener(new WorkspaceModel.WorkspaceListener() {
-            @Override
-            public void onDirectoryChanged(java.nio.file.Path newDirectory) {
-                if (newDirectory != null) {
-                    navigator.files.setCurrentDirectory(newDirectory.toString());
-                    navigator.files.refreshFiles();
-                    pathHeader.setOverridePath(null);
-                    if (repaintCallback != null) repaintCallback.run();
-                }
-            }
+        this.files.getFilesList().setFileOpenListener(this.workspaceModel::setActiveFile);
 
-            @Override
-            public void onActiveFileChanged(File newFile) {
-                if (newFile != null) {
-                    String name = newFile.getName().toLowerCase();
-                    if (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".gif") || name.endsWith(".bmp") || name.endsWith(".svg")) {
-                        showImageViewer(newFile);
-                    } else {
-                        editor.fileManager.loadFile(newFile);
-                        showEditor();
-                    }
-                } else {
-                    showExplorer();
-                }
-                if (repaintCallback != null) repaintCallback.run();
-            }
-        });
-
-        this.navigator.files.setFileOpenListener(file -> {
-            this.workspaceModel.setActiveFile(file);
-        });
-
-        this.pathHeader.setNavigationCallback(path -> {
-            java.nio.file.Path targetPath = this.workspaceModel.resolvePath(path);
+        this.header.setNavigationCallback(path -> {
+            Path targetPath = this.workspaceModel.resolvePath(path);
             this.workspaceModel.setCurrentDirectory(targetPath);
             this.workspaceModel.setActiveFile(null);
         });
@@ -134,78 +101,66 @@ public class ViewManager {
             this.onInputFocusChanged(source.isFocused());
         });
 
-        this.resultSearch = new ResultSearch(cols, rows);
-        this.resultProgress = new ResultProgress(cols, rows);
-        this.heatmap = new Heatmap(this.omnibox, cols, rows);
+        this.editor.setVisible(false);
+        this.imageViewer.setVisible(false);
+        this.resultSearch.setVisible(false);
+        this.resultProgress.setVisible(false);
 
-        this.container.add(this.pathHeader);
-        this.container.add(this.navigator);
+        this.container = new Container(0, 0, cols, rows);
+        this.container.setBackgroundColor(ThemeService.get().getBackground());
+        this.container.add(this.header);
+        this.container.add(this.files);
         this.container.add(this.editor);
+        this.container.add(this.editor.getEditorAutocompleteManager().getAutocompletePopup());
+        this.container.add(this.editorDialog);
         this.container.add(this.imageViewer);
         this.container.add(this.omnibox);
         this.container.add(this.footer);
         this.container.add(this.resultSearch);
         this.container.add(this.resultProgress);
-//      this.container.add(this.heatmap);
-        this.container.add(this.footer.popupMode);
-        this.container.add(this.footer.popupService);
-        this.container.add(this.footer.popupModel);
-        this.container.add(this.editor.autocompleteMgr.getAutocompletePopup());
-        this.container.add(this.dialog);
+        this.container.add(this.resultError);
+        this.container.add(this.userBubble);
+        this.container.add(this.bubble);
     }
 
     public void showExplorer() {
-        if (this.pathHeader != null) {
-            this.pathHeader.setOverridePath(null);
-            this.pathHeader.setVisible(true);
+        final EditorFileManager editorFileManager = this.editor.getEditorFileManager();
+        final File currentFile = editorFileManager.getCurrentFile();
+        final File currentDirectory = currentFile.getParentFile();
+        this.files.getFilesList().navigateTo(currentDirectory);
+        this.header.setOverridePath(null);
+//        this.header.setVisible(true);
+        this.files.getFilesHeader().setVisible(true);
+        this.files.getFilesList().setVisible(true);
+        this.files.getFilesFooter().setVisible(true);
+        if (this.focusManager.getCurrentComponent() != this.omniboxTextController) {
+            this.focusManager.setCurrentComponent(this.filesController);
         }
-        if (this.navigator != null) {
-            this.navigator.columnHeader.setVisible(true);
-            this.navigator.files.setVisible(true);
-            this.navigator.footer.setVisible(true);
-            if (this.focusManager.getCurrentComponent() != this.omniboxTextController) {
-                this.focusManager.setCurrentComponent(this.filesController);
-            }
-        }
-        if (this.editor != null) {
-            this.editor.setVisible(false);
-        }
-        if (this.imageViewer != null) {
-            this.imageViewer.setVisible(false);
-        }
+        this.editor.setVisible(false);
+        this.imageViewer.setVisible(false);
     }
 
     public void showEditor() {
-        if (this.navigator != null) {
-            this.navigator.columnHeader.setVisible(false);
-            this.navigator.files.setVisible(false);
-            this.navigator.footer.setVisible(false);
-        }
-        if (this.imageViewer != null) {
-            this.imageViewer.setVisible(false);
-        }
-        if (this.pathHeader != null) {
-            this.pathHeader.setVisible(true);
-        }
-        if (this.editor != null) {
-            this.editor.setVisible(true);
-            this.focusManager.setCurrentComponent(this.editorController);
-        }
+        this.files.getFilesHeader().setVisible(false);
+        this.files.getFilesList().setVisible(false);
+        this.files.getFilesFooter().setVisible(false);
+        this.imageViewer.setVisible(false);
+//        this.header.setVisible(true);
+        this.editor.setVisible(true);
+        this.focusManager.setCurrentComponent(this.editorController);
     }
 
     public void showImageViewer(File file) {
-        if (this.navigator != null) {
-            this.navigator.columnHeader.setVisible(false);
-            this.navigator.files.setVisible(false);
-            this.navigator.footer.setVisible(false);
+        if (this.files != null) {
+            this.files.getFilesHeader().setVisible(false);
+            this.files.getFilesList().setVisible(false);
+            this.files.getFilesFooter().setVisible(false);
         }
         if (this.editor != null) {
             this.editor.setVisible(false);
         }
-        if (this.pathHeader != null) {
-            this.pathHeader.setOverridePath(file != null ? file.getAbsolutePath() : null);
-            this.pathHeader.setVisible(true);
-        }
+            this.header.setOverridePath(file != null ? file.getAbsolutePath() : null);
+//            this.header.setVisible(true);
         if (this.imageViewer != null && file != null) {
             this.imageViewer.setVisible(true);
             this.imageViewer.loadImage(file);
@@ -223,18 +178,93 @@ public class ViewManager {
         if (this.resultSearch != null) {
             this.resultSearch.setY(rows - 8);
         }
-        if (this.dialog != null) {
-            this.dialog.center(cols, rows);
+        if (this.editorDialog != null) {
+            this.editorDialog.center(cols, rows);
         }
     }
 
-    public void prepareRepaint(int rows) {
-        if (this.omnibox != null) {
-            this.omnibox.adjustHeight(rows);
-        }
-    }
-
-    private void onInputFocusChanged(boolean focused) {
+    private void onInputFocusChanged(final boolean focused) {
         // Focus listener implementation hook
+    }
+
+    public Editor getEditor() {
+        return this.editor;
+    }
+
+    public Files getNavigator() {
+        return this.files;
+    }
+
+    public Omnibox getOmnibox() {
+        return this.omnibox;
+    }
+
+    public Footer getFooter() {
+        return this.footer;
+    }
+
+    public WorkspaceModel getWorkspaceModel() {
+        return this.workspaceModel;
+    }
+
+    public Container getContainer() {
+        return this.container;
+    }
+
+    public EditorDialog getEditorDialog() {
+        return this.editorDialog;
+    }
+
+    public ResultSearch getResultSearch() {
+        return resultSearch;
+    }
+
+    public ResultProgress getResultProgress() {
+        return resultProgress;
+    }
+
+    public FocusManager getFocusManager() {
+        return this.focusManager;
+    }
+
+    private class MyWorkspaceListener implements WorkspaceListener {
+        private final Runnable repaintCallback;
+
+        public MyWorkspaceListener(Runnable repaintCallback) {
+            this.repaintCallback = repaintCallback;
+        }
+
+        @Override
+        public void onDirectoryChanged(Path newDirectory) {
+            if (newDirectory != null) {
+                files.getFilesList().setCurrentDirectory(newDirectory.toString());
+                files.getFilesList().refreshFiles();
+                header.setOverridePath(null);
+                if (repaintCallback != null) repaintCallback.run();
+            }
+        }
+
+        @Override
+        public void onActiveFileChanged(File newFile) {
+            if (newFile != null) {
+                header.setOverridePath(newFile.getAbsolutePath());
+                String name = newFile.getName().toLowerCase();
+                if (name.endsWith(".png") ||
+                        name.endsWith(".jpg") ||
+                        name.endsWith(".jpeg") ||
+                        name.endsWith(".gif") ||
+                        name.endsWith(".bmp") ||
+                        name.endsWith(".svg")) {
+                    showImageViewer(newFile);
+                } else {
+                    editor.getEditorFileManager().loadFile(newFile);
+                    showEditor();
+                }
+            } else {
+                header.setOverridePath(null);
+                showExplorer();
+            }
+            if (repaintCallback != null) repaintCallback.run();
+        }
     }
 }

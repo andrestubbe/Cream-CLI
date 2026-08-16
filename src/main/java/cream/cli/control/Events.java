@@ -1,66 +1,46 @@
 package cream.cli.control;
 
 import cream.cli.Client;
+import cream.cli.control.focus.FocusManager;
+import cream.cli.control.handler.MouseHandler;
 import fastkeyboard.FastKeyboard;
 import fastkeyboard.FastKeyboardImpl;
 import fastkeyboard.Keys;
+import fastterminal.AnsiMouse;
 import fastterminal.FastTerminal;
 
-/**
- * Lean Events dispatcher for CreamCLI.
- * Directs keyboard events straight to FocusManager and updates modifier keys.
- */
-public class Events {
+public final class Events {
 
     private final Client client;
     private final FocusManager focusManager;
-    private MouseHandler mouseHandler;
+    private final MouseHandler mouseHandler;
 
-    public Events(final Client client) {
+    public Events(final Client client, final String[] args) {
         this.client = client;
         this.focusManager = client.getViewManager().focusManager;
-        this.initMouse();
-        this.initKeyboard();
+        this.mouseHandler = new MouseHandler(this.client);
+        AnsiMouse.open(this.mouseHandler);
+        final FastKeyboard keyboard = new FastKeyboardImpl();
+        keyboard.startListening(this::onKeyEvent);
+        IOManager.setupRecent(client, args);
     }
 
-    public void initMouse() {
-        this.mouseHandler = new MouseHandler(client, client.getContainer(), client.getNavigator(), client.getEditor(), client.getOmnibox(), client.getFooter());
-        fastterminal.AnsiMouse.open(this.mouseHandler);
-    }
-
-    private void initKeyboard() {
-        FastKeyboard keyboard = new FastKeyboardImpl();
-        keyboard.startListening((h, vKey, mc, pressed, e0, ts, ch) -> {
-            // Always update modifier state, even when terminal is not focused,
-            // to prevent Ctrl/Shift/Alt from getting stuck.
-            boolean isModifier = false;
-            if (vKey == Keys.SHIFT || vKey == Keys.LSHIFT || vKey == Keys.RSHIFT) {
-                focusManager.setShiftHeld(pressed);
-                isModifier = true;
+    private void onKeyEvent(final long h, final int vKey, final int mc, final boolean pressed, final boolean e0, final long ts, final String ch) {
+        switch (vKey) {
+            case Keys.SHIFT, Keys.LSHIFT, Keys.RSHIFT -> this.focusManager.setShiftHeld(pressed);
+            case Keys.ALT, Keys.LALT, Keys.RALT -> this.focusManager.setAltHeld(pressed);
+            case Keys.CONTROL, Keys.LCONTROL, Keys.RCONTROL -> {
+                this.focusManager.setCtrlHeld(pressed);
+                this.mouseHandler.recheckHover();
             }
-            if (vKey == Keys.ALT || vKey == Keys.LALT || vKey == Keys.RALT || vKey == Keys.MENU) {
-                focusManager.setAltHeld(pressed);
-                isModifier = true;
-            }
-            if (vKey == Keys.CONTROL || vKey == Keys.LCONTROL || vKey == Keys.RCONTROL) {
-                focusManager.setCtrlHeld(pressed);
-                isModifier = true;
-                if (mouseHandler != null) {
-                    mouseHandler.recheckHover();
-                }
-            }
-
-            // Block all non-modifier dispatching when terminal is not focused
-            if (!FastTerminal.isTerminalFocused()) return;
-
-            if (pressed && vKey == Keys.Q && focusManager.isCtrlHeld()) {
-                System.exit(0);
-                return;
-            }
-
-            if (focusManager.dispatchKeyInput(vKey, ch, pressed)) {
-                client.repaint();
-            }
-        });
+        }
+        if (!FastTerminal.isTerminalFocused()) return;
+        if (pressed && vKey == Keys.Q && focusManager.isCtrlHeld()) {
+            System.exit(0);
+            return;
+        }
+        if (this.focusManager.dispatchKeyInput(vKey, ch, pressed)) {
+            this.client.repaint();
+        }
     }
 }

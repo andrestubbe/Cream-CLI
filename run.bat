@@ -12,5 +12,5 @@ call mvn clean compile dependency:build-classpath "-Dmdep.outputFile=cp.txt" "-D
 if %ERRORLEVEL% NEQ 0 ( echo ❌ Build failed. & exit /b %ERRORLEVEL% )
 
 for /f "usebackq delims=" %%i in ("cp.txt") do set "CP=%%i"
-java -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 --enable-native-access=ALL-UNNAMED -cp "target\classes;%CP%" cream.cli.Client %*
+java -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 --enable-native-access=ALL-UNNAMED -cp "target\classes;%CP%" cream.cli.Client %* 2>nul
 

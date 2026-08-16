@@ -1,9 +1,10 @@
 package cream.cli.view.editor;
 
-import cream.cli.Theme;
 import cream.cli.view.editor.syntax.PlainTextHighlighter;
 import cream.cli.view.editor.syntax.SyntaxHighlighter;
+import cream.cli.view.theme.ThemeService;
 import cream.cli.view.ui.ScrollController;
+import fasttui.component.ColorSet;
 import fasttui.component.Component;
 import fasttui.component.Container;
 import fasttui.composable.ScrollVertical;
@@ -12,100 +13,83 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-/**
- * Pure MVC View Container for the Editor in CreamCLI.
- * Delegates file, navigation, editing, and autocomplete logic to specialized sub-managers.
- */
 public class Editor extends Container {
 
-    public record HyperlinkRange(int line, int startCol, int endCol, File targetFile) {}
+    private final EditorFileManager editorFileManager;
+    private final EditorCaretNavigation editorCaretNavigation;
+    private final EditorSelectionManager editorSelectionManager;
+    private final EditorDocumentOperations editorDocumentOperations;
+    private final EditorAutocompleteManager editorAutocompleteManager;
+    private final EditorDocumentBuffer editorDocumentBuffer;
+    private final EditorCaret editorCaret;
+    private final EditorSelection editorSelection;
+    private final EditorLineNumber[] editorLineNumbers;
+    private final EditorCodeLine[] editorCodeLines;
+    private final EditorOverlay overlay;
+    private final ScrollVertical editorScroll;
+    private final ScrollController editorScrollController;
 
+    private SyntaxHighlighter highlighter;
     private HyperlinkRange hoveredHyperlink = null;
-
-    // Core
-    final DocumentBuffer buffer = new DocumentBuffer();
-    final Caret caret = new Caret();
-    final Selection selection = new Selection();
-
-    private SyntaxHighlighter highlighter = PlainTextHighlighter.INSTANCE;
-
-    // Layout
-    private final int cols;
-    public final int visibleLines;
-    static final int CODE_X = 6;
-    public final ScrollController scrollController;
     private Runnable repaintTrigger;
 
-    // Components
-    private final LineNumber[] numbers;
-    private final CodeLine[] codeLines;
-    private final ScrollVertical scroll;
-    private final EditorOverlay overlay;
+    static final int CODE_X = 6;
 
-    // Sub-Managers
-    public final EditorFileManager fileManager = new EditorFileManager(this);
-    public final CaretNavigation caretNav = new CaretNavigation(this);
-    public final SelectionManager selectionMgr = new SelectionManager(this);
-    public final DocumentOperations docOps = new DocumentOperations(this);
-    public final EditorAutocompleteManager autocompleteMgr = new EditorAutocompleteManager(this);
-
-    public Editor(int cols, int rows) {
-        super(0, 0, cols, rows);
-
-        this.cols = cols;
-        this.visibleLines = rows - 4;
-        this.numbers = new LineNumber[this.visibleLines];
-        this.codeLines = new CodeLine[this.visibleLines];
-        for (int r = 0; r < visibleLines; r++) {
-            this.numbers[r] = new LineNumber(1, r);
-            this.codeLines[r] = new CodeLine(CODE_X, r, this);
+    public Editor(final int x, final int y, final int width, final int Height, final Runnable repaintTrigger) {
+        super(x, y, width, Height);
+        this.repaintTrigger = repaintTrigger;
+        this.editorFileManager = new EditorFileManager(this);
+        this.editorCaretNavigation = new EditorCaretNavigation(this);
+        this.editorSelectionManager = new EditorSelectionManager(this);
+        this.editorDocumentOperations = new EditorDocumentOperations(this);
+        this.editorAutocompleteManager = new EditorAutocompleteManager(this);
+        this.editorDocumentBuffer = new EditorDocumentBuffer();
+        this.editorCaret = new EditorCaret();
+        this.editorSelection = new EditorSelection();
+        this.editorLineNumbers = new EditorLineNumber[this.height];
+        this.editorCodeLines = new EditorCodeLine[this.height];
+        for (int rows = 0; rows < this.height; rows++) {
+            this.editorLineNumbers[rows] = new EditorLineNumber(1, rows);
+            this.editorCodeLines[rows] = new EditorCodeLine(CODE_X, rows, this);
         }
-
-        final int scrollX = cols - 1;
-        final int scrollY = 0;
-        this.scroll = new ScrollVertical(scrollX, scrollY, this.visibleLines, Theme.SCROLLBAR_FOREGROUND_SET, Theme.SCROLLBAR_BACKGROUND_SET);
-        this.scrollController = new ScrollController(this.scroll, () -> {
-            refreshLines();
-            if (repaintTrigger != null) repaintTrigger.run();
+        int transparent = -2;
+        ColorSet scrollFg = new ColorSet(ThemeService.get().getScrollbarForegroundNormal(), ThemeService.get().getScrollbarForegroundHover(), ThemeService.get().getScrollbarForegroundNormal(), ThemeService.get().getScrollbarForegroundNormal());
+        ColorSet scrollBg = new ColorSet(transparent, ThemeService.get().getScrollbarBackgroundHover(), transparent, transparent);
+        this.editorScroll = new ScrollVertical(this.width - 1, 0, this.height, scrollFg, scrollBg);
+        this.editorScrollController = new ScrollController(this.editorScroll, () -> {
+            this.refreshLines();
+            this.repaintTrigger.run();
         });
-
-        this.overlay = new EditorOverlay(CODE_X, 0, cols - CODE_X - 1, visibleLines);
+        this.highlighter = PlainTextHighlighter.INSTANCE;
+        this.overlay = new EditorOverlay(CODE_X, 0, this.width - CODE_X - 1, this.getHeight());
         this.overlay.addBehavior(new EditorBehaviour(this));
         this.addAll(getComponents());
         this.refresh();
     }
 
-    public void setRepaintTrigger(Runnable repaintTrigger) {
-        this.repaintTrigger = repaintTrigger;
-    }
-
-    // Scrolling
-
     public void scroll(int delta) {
-        scrollController.scrollBy(delta);
+        editorScrollController.scrollBy(delta);
     }
-
-    // Mouse Mapping & Refresh
 
     public int[] cellToDocPos(int cellX, int cellY) {
-        int docLine = Math.min(getScrollOffset() + cellY - getY(), buffer.lineCount() - 1);
+        int docLine = Math.min(getScrollOffset() + cellY - getY(), editorDocumentBuffer.lineCount() - 1);
         docLine = Math.max(0, docLine);
-        int docCol = Math.max(0, Math.min(cellX - getX() - CODE_X, buffer.getLine(docLine).length()));
+        int docCol = Math.max(0, Math.min(cellX - getX() - CODE_X, editorDocumentBuffer.getLine(docLine).length()));
         return new int[]{docLine, docCol};
     }
 
     public void refresh() {
-        scrollController.update(buffer.lineCount(), visibleLines);
+        editorScrollController.update(editorDocumentBuffer.lineCount(), this.getHeight());
         refreshLines();
     }
 
     private void refreshLines() {
         int offset = getScrollOffset();
-        for (int r = 0; r < visibleLines; r++) {
+        for (int r = 0; r < this.getHeight(); r++) {
             int docLine = offset + r;
-            boolean valid = docLine < buffer.lineCount();
-            numbers[r].setText(valid ? String.valueOf(docLine + 1) : "");
-            codeLines[r].setDocLine(valid ? docLine : -1);
+            boolean valid = docLine < editorDocumentBuffer.lineCount();
+            editorLineNumbers[r].setText(valid ? String.valueOf(docLine + 1) : "");
+            editorCodeLines[r].setDocLine(valid ? docLine : -1);
         }
     }
 
@@ -119,50 +103,81 @@ public class Editor extends Container {
     public void onResize() {
         int x = getX();
         int w = getWidth();
-        for (int r = 0; r < visibleLines; r++) {
-            numbers[r].setX(x + 1);
-            codeLines[r].setX(x + CODE_X);
+        for (int r = 0; r < this.getHeight(); r++) {
+            editorLineNumbers[r].setX(x + 1);
+            editorLineNumbers[r].setY(r);
+            editorCodeLines[r].setX(x + CODE_X);
+            editorCodeLines[r].setY(r);
         }
-        scroll.setX(x + w - 1);
+        editorScroll.setX(x + w - 1);
         overlay.setX(x + CODE_X);
         overlay.setWidth(Math.max(1, w - CODE_X - 1));
     }
 
     public Component[] getComponents() {
-        return Stream.concat(Stream.concat(Arrays.stream(numbers), Arrays.stream(codeLines)), Stream.of(scroll, overlay)).toArray(Component[]::new);
+        return Stream.concat(
+                Stream.concat(
+                        Arrays.stream(editorLineNumbers),
+                        Arrays.stream(editorCodeLines)
+                ),
+                Stream.of(editorScroll, overlay)).toArray(Component[]::new);
+    }
+
+    public EditorFileManager getEditorFileManager() {
+        return this.editorFileManager;
+    }
+
+    public EditorCaretNavigation getEditorCaretNavigation() {
+        return this.editorCaretNavigation;
+    }
+
+    public EditorSelectionManager getEditorSelectionManager() {
+        return this.editorSelectionManager;
+    }
+
+    public EditorDocumentOperations getEditorDocumentOperations() {
+        return this.editorDocumentOperations;
+    }
+
+    public EditorAutocompleteManager getEditorAutocompleteManager() {
+        return this.editorAutocompleteManager;
     }
 
     public int getLineCount() {
-        return buffer.lineCount();
+        return this.editorDocumentBuffer.lineCount();
     }
 
     public int getScrollOffset() {
-        return scrollController.getScrollOffset();
+        return this.editorScrollController.getScrollOffset();
     }
 
     public SyntaxHighlighter getHighlighter() {
-        return highlighter;
-    }
-
-    public void setHighlighter(SyntaxHighlighter highlighter) {
-        this.highlighter = highlighter;
-    }
-
-    public void setScrollOffset(int offset) {
-        scrollController.setScrollOffset(offset);
+        return this.highlighter;
     }
 
     public HyperlinkRange getHoveredHyperlink() {
-        return hoveredHyperlink;
+        return this.hoveredHyperlink;
     }
 
-    public void setHoveredHyperlink(HyperlinkRange range) {
-        this.hoveredHyperlink = range;
+    public EditorDocumentBuffer getEditorDocumentBuffer() {
+        return this.editorDocumentBuffer;
+    }
+
+    public EditorCaret getEditorCaret() {
+        return this.editorCaret;
+    }
+
+    public EditorSelection getEditorSelection() {
+        return this.editorSelection;
+    }
+
+    public ScrollController getEditorScrollController() {
+        return this.editorScrollController;
     }
 
     public int[] getWordBoundsAt(int docLine, int docCol) {
-        if (docLine < 0 || docLine >= buffer.lineCount()) return null;
-        String line = buffer.getLine(docLine);
+        if (docLine < 0 || docLine >= editorDocumentBuffer.lineCount()) return null;
+        String line = editorDocumentBuffer.getLine(docLine);
         if (docCol < 0 || docCol >= line.length()) return null;
 
         char c = line.charAt(docCol);
@@ -181,9 +196,29 @@ public class Editor extends Container {
         return new int[]{start, end};
     }
 
-    public String getWordAt(int docLine, int docCol) {
-        int[] bounds = getWordBoundsAt(docLine, docCol);
+    public String getWordAt(final int docLine, final int docCol) {
+        int[] bounds = this.getWordBoundsAt(docLine, docCol);
         if (bounds == null) return null;
-        return buffer.getLine(docLine).substring(bounds[0], bounds[1]);
+        return editorDocumentBuffer.getLine(docLine).substring(bounds[0], bounds[1]);
     }
+
+    public void setRepaintTrigger(final Runnable repaintTrigger) {
+        this.repaintTrigger = repaintTrigger;
+    }
+
+    public void setHighlighter(final SyntaxHighlighter syntaxHighlighter) {
+        this.highlighter = syntaxHighlighter;
+    }
+
+    public void setScrollOffset(final int scrollOffset) {
+        this.editorScrollController.setScrollOffset(scrollOffset);
+    }
+
+    public void setHoveredHyperlink(final HyperlinkRange hyperlinkRange) {
+        this.hoveredHyperlink = hyperlinkRange;
+    }
+
+    public record HyperlinkRange(int line, int startCol, int endCol, File targetFile) {
+    }
+
 }

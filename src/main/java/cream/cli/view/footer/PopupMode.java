@@ -1,6 +1,6 @@
 package cream.cli.view.footer;
 
-import cream.cli.Theme;
+import cream.cli.view.theme.ThemeService;
 import cream.cli.view.ui.Cell;
 import cream.cli.view.ui.Popup;
 import cream.cli.view.ui.Row;
@@ -9,9 +9,9 @@ import fasttui.component.ColorSet;
 public class PopupMode extends Popup {
 
     public PopupMode(int cols, int rows) {
-        super(1, rows - 7, 14, 6);
-        this.backgroundColor = Theme.OMNIBOX_MODE_BACKGROUND_SET.normal;
-        this.foregroundColor = Theme.OMNIBOX_MODE_FOREGROUND_SET.normal;
+        super(0, -6, 14, 6);
+        this.backgroundColor = ThemeService.get().getFooterModeBackgroundNormal();
+        this.foregroundColor = ThemeService.get().getFooterModeForegroundNormal();
         this.createList();
     }
 
@@ -29,17 +29,20 @@ public class PopupMode extends Popup {
         final int[] widths = {2, length[1] + space};
         this.width = widths[0] + widths[1] + margin * 2;
 
-        final ColorSet POPUP_BACKGROUND_ROW_SET = Theme.POPUP_BACKGROUND_ROW_SET;
+        ColorSet rowBg = new ColorSet(ThemeService.get().getPopupBackgroundNormal(), ThemeService.get().getPopupBackgroundRowHover(), ThemeService.get().getPopupBackgroundRowHover(), ThemeService.get().getPopupBackgroundRowHover());
+        ColorSet indicatorFg = new ColorSet(ThemeService.get().getPopupForegroundSelection(), ThemeService.get().getPopupForegroundSelection(), ThemeService.get().getPopupForegroundSelection(), ThemeService.get().getPopupForegroundSelection());
+        ColorSet normalFg = new ColorSet(ThemeService.get().getPopupForegroundNormal(), ThemeService.get().getPopupForegroundSelection(), ThemeService.get().getPopupForegroundSelection(), ThemeService.get().getPopupForegroundSelection());
+
         ColorSet[] themes = {
-                Theme.POPUP_FOREGROUND_INDICATOR_SET,
-                Theme.POPUP_FOREGROUND_NORMAL_SET
+                indicatorFg,
+                normalFg
         };
 
         for (int i = 0; i < content.length; i++) {
             final int px = margin;
             final int py = margin + i;
             final int pWidth = this.width - margin * 2;
-            Row row = new Row(px, py, pWidth, POPUP_BACKGROUND_ROW_SET, () -> setVisible(false));
+            Row row = new Row(px, py, pWidth, rowBg, () -> setVisible(false));
             for (int col = 0; col < content[i].length; col++) {
                 Cell cell = new Cell(content[i][col], widths[col], themes[col]);
                 row.addCell(cell);

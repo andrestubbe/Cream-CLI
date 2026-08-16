@@ -2,7 +2,6 @@ package cream.cli.view.files;
 
 import cream.cli.model.FileCategory;
 import java.io.File;
-import java.util.Locale;
 import java.util.function.Consumer;
 
 public final class FilesNavigation {
