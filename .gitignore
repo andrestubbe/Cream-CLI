@@ -1,27 +1,6 @@
-# IDE files
-.vscode/
-.idea/
-*.iml
-
-# OS files
-Thumbs.db
-.DS_Store
-
-# Build artifacts
-/target/
-/build/
-/out/
-
-# Sources (closed source)
-/src/
-
-# Infrastructure (local only, not published)
-pom.xml
-run.bat
-jitpack.yml
-.gitattributes
-.github/
-cp.txt
-
-# Release Staging
-/release/
+# Hide all source code and binaries - only README.md and docs/ are public
+*
+!README.md
+!docs/
+!docs/**
+!.gitignore
