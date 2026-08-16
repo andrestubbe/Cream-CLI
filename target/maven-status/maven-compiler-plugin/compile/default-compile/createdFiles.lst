@@ -4,7 +4,6 @@ cream\cli\view\ui\Table.class
 cream\cli\model\index\JarClassScanner.class
 cream\cli\view\files\FilesDirectoryLoader.class
 cream\cli\model\FileCategory.class
-cream\cli\view\editor\syntax\MarkdownSyntaxHighlighter.class
 sketch\cli\view\region\FastTerminalUtil.class
 cream\cli\control\handler\EditorAction.class
 cream\cli\model\task\CreamTaskManager.class
@@ -19,7 +18,6 @@ cream\cli\view\editor\EditorCaret.class
 cream\cli\view\ViewManager$MyWorkspaceListener.class
 cream\cli\model\index\ClassInfo$IndexSource.class
 cream\cli\model\index\AutocompleteModel.class
-cream\cli\view\editor\syntax\JavaSyntaxHighlighter.class
 cream\cli\view\files\FilesBehaviour.class
 cream\cli\test\FastFileIndexExample$SearchResult.class
 cream\cli\model\file\IndexMetrics.class
@@ -39,13 +37,11 @@ sketch\cli\control\EventBehaviour.class
 cream\cli\model\animation\PathAnimationSteps.class
 cream\cli\view\ui\Bubble.class
 cream\cli\model\index\ClassIndexCache.class
-cream\cli\view\editor\syntax\CssSyntaxHighlighter.class
 sketch\cli\view\Alignment.class
 cream\cli\control\focus\FocusManager$FallbackFocusTarget.class
 cream\cli\control\command\IndexCommand.class
 cream\cli\model\index\JavaSourceScanner.class
 cream\cli\view\omnibox\OmniBoxTextBehaviour.class
-cream\cli\view\editor\syntax\PythonSyntaxHighlighter.class
 cream\cli\view\editor\EditorOverlay.class
 cream\cli\view\editor\EditorDocumentBuffer.class
 cream\cli\view\editor\syntax\FastTokenizeHighlighter.class
@@ -65,10 +61,8 @@ cream\cli\control\focus\FocusTarget.class
 cream\cli\view\terminal\TerminalManager.class
 cream\cli\control\handler\EditorController$1.class
 cream\cli\view\result\ResultError.class
-cream\cli\view\editor\syntax\JavaScriptSyntaxHighlighter.class
 cream\cli\view\files\FilesRenderer.class
 sketch\cli\view\component\Panel.class
-cream\cli\view\editor\syntax\CppSyntaxHighlighter.class
 cream\cli\view\ui\EditorDialog$Option.class
 sketch\cli\FastStyle.class
 cream\cli\control\handler\OmniboxTextController.class
@@ -76,7 +70,6 @@ cream\cli\control\handler\EditorController.class
 cream\cli\model\thread\DelayedExecution.class
 cream\cli\view\editor\autocomplete\JavaAutocompleteProvider.class
 sketch\cli\view\component\button\Button.class
-cream\cli\view\editor\syntax\CSharpSyntaxHighlighter.class
 cream\cli\view\theme\FileIcons.class
 cream\cli\model\index\JdkModuleScanner.class
 sketch\cli\view\component\button\ButtonColorSet.class
@@ -89,7 +82,6 @@ cream\cli\model\util\StopWatch.class
 cream\cli\view\editor\autocomplete\AutocompleteItemRenderer.class
 sketch\cli\view\component\selectbutton\SelectButton.class
 cream\cli\view\footer\PopupModel.class
-cream\cli\view\editor\syntax\JsonSyntaxHighlighter.class
 cream\cli\test\EmojiList.class
 cream\cli\view\files\FilesFooter.class
 sketch\cli\control\EventListener.class
@@ -120,7 +112,6 @@ cream\cli\control\command\BotCommand.class
 cream\cli\control\command\CommandRegistry.class
 cream\cli\control\focus\FocusManager.class
 cream\cli\control\KeyCombo.class
-cream\cli\view\editor\syntax\XmlSyntaxHighlighter.class
 cream\cli\view\result\ResultProgress.class
 sketch\cli\view\component\popup\DialogPopup.class
 cream\cli\model\util\SymbolResolver.class

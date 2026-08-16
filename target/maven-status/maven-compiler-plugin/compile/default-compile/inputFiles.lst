@@ -6,14 +6,11 @@ C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\test\CreamClassIndexTest.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\viewer\ImageViewer.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\model\file\IndexManager.java
-C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\syntax\JavaScriptSyntaxHighlighter.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\view\component\selectbutton\SelectButton.java
-C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\syntax\CSharpSyntaxHighlighter.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\view\component\button\Button.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\model\index\JdkModuleScanner.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\files\FileOpenListener.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\model\task\CreamTaskManager.java
-C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\syntax\XmlSyntaxHighlighter.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\view\component\dropdown\DropdownPopup.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\EditorLineNumber.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\files\FilesList.java
@@ -76,7 +73,6 @@ C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\control\KeyEvent.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\model\index\JavaSourceScanner.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\EditorFileManager.java
-C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\syntax\PythonSyntaxHighlighter.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\view\Alignment.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\test\CreamIndexTest.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\files\FileConstants.java
@@ -105,7 +101,6 @@ C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\EditorSelection.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\ui\Row.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\ViewManager.java
-C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\syntax\CppSyntaxHighlighter.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\control\MouseEvent.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\files\FilesNavigation.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\model\index\MavenClassScanner.java
@@ -115,7 +110,6 @@ C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\theme\CreamTheme.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\Main.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\model\FileCategory.java
-C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\syntax\CssSyntaxHighlighter.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\files\FileUtil.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\theme\RosePineMoonTheme.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\view\component\popup\DialogPopup.java
@@ -132,7 +126,6 @@ C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\files\FilesDirectoryLoader.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\model\WorkspaceModel.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\result\Heatmap.java
-C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\syntax\JavaSyntaxHighlighter.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\ui\Bubble.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\view\component\BorderStyle.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\model\util\StopWatch.java
@@ -141,7 +134,6 @@ C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\EditorHistoryState.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\control\EventBehaviour.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\EditorOverlay.java
-C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\syntax\MarkdownSyntaxHighlighter.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\FastStyle.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\syntax\PlainTextHighlighter.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\files\FilesSelection.java
@@ -151,5 +143,4 @@ C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\model\thread\ContinuousExecution.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\autocomplete\JavaAutocompleteProvider.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\sketch\cli\view\StyledSpan.java
-C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\view\editor\syntax\JsonSyntaxHighlighter.java
 C:\Users\andre\Documents\2026-07-16-Work-Cream\2026-07-16-Work-CreamCLI\src\main\java\cream\cli\control\handler\MouseHandler.java
